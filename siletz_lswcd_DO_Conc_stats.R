@@ -3,6 +3,7 @@
 # Ryan Shojinaga, Oregon DEQ, shojinaga.ryan@deq.state.or.us
 # Adapted from WISE data processing by Dan Sobota
 
+# LOAD PACKAGES----
 require(reshape2)
 require(dplyr)
 require(ggplot2)
@@ -10,10 +11,10 @@ library(tidyverse)
 library(scales)
 
 #----------DATA IMPORT AND AUDITING (REMOVE NA & D-QUALITY DATA)----------
-#-------------------------------------------------------------------------------
 # Import data from master data file
-data.dir <- "C:/Users/rshojin/Desktop/001_projects/mid_coast_DO_tmdls/siletz/001_data/wq/siletz_VolMon_data/"
-data.tmp <- read.csv(paste0(data.dir, "siletz_volmon_cont_data.csv"))
+data.dir <- "\\\\deqhq1\\tmdl\\TMDL_WR\\MidCoast\\Models\\Dissolved Oxygen\\Middle_Siletz_River_1710020405\\"
+dir.sub1 <- "001_data\\wq_data\\Monitoring 2017\\LSWCD\\Lincoln_SWCD_SILETZ RIVER_06292017-01052018\\"
+data.tmp <- read.csv(paste0(data.dir, dir.sub1, "siletz_volmon_cont_data.csv"))
 data.tmp$DATE.TIME <- as.POSIXct(data.tmp$DATE.TIME, format = "%m/%d/%Y %H:%M", tz = "America/Los_Angeles")
 STAID_vctr <- unique(data.tmp$STAID) # create a list of stations
 data.tmp <- data.tmp[complete.cases(data.tmp[, 4:7]), ] # Remove NA
@@ -26,7 +27,7 @@ data.tmp$DOS_mgL <- ifelse(data.tmp$DO_Sat > 100, data.tmp$DO_mgL/data.tmp$DO_Sa
 # Create table of mean and min daily DO per site, and re-order from Downstream -> Upstream
 do.day.mn <- dcast(data.tmp, data.tmp$DATE ~ data.tmp$STAID, fun = mean, value.var = "DOS_mgL")
 do.day.mi <- dcast(data.tmp, data.tmp$DATE ~ data.tmp$STAID, fun = min, value.var = "DOS_mgL")
-col.order <- c(1, 13, 4, 2, 7, 6, 9, 10, 3, 5, 8, 12, 11) # Initial ordering in alphabetical
+col.order <- c(1, 13, 14, 4, 7, 2, 6, 9, 10, 3, 5, 8, 12, 11) # Initial ordering in alphabetical
 do.day.mn <- do.day.mn[col.order] #Reorder sites from alphabetical to D/S -> U/S
 do.day.mi <- do.day.mi[col.order] 
 # Change out Inf to NA in the Min mean DO table
@@ -81,7 +82,7 @@ for (j in 1:length(STAID_vctr)) {
   # Calculate rolling average of daily mean/min for Rearing Period; i refers to dates, j refers to stations
   for (i in 1:ind.R.end) {
     if (do.day.mn[i, 1] < dat.R.beg + 30) {
-      do.30d.mn[i, j + 1] <- mean(do.day.mn[1:i, j + 1], na.rm = TRUE)
+      do.30d.mn[i, j + 1] <- mean(do.day.mn[1 : i, j + 1], na.rm = TRUE)
     }
     else {
       do.30d.mn[i, j + 1] <- mean(do.day.mn[(i - 29):i, j + 1], na.rm = TRUE)
@@ -107,15 +108,13 @@ do.30d.mn.gr <- melt(do.30d.mn, id.vars = "DATE", variable.name = "Station")
 do.day.mi.gr <- melt(do.day.mi, id.vars = "DATE", variable.name = "Station")
 # Rename the values in the Station column
 sites.old <- unique(do.7d.mi.gr$Station)
-data.site1 <- read.csv(paste0(data.dir, "sites_order_z_TEMP.csv")) # This file does not have sites with C-qual values
-data.site2 <- read.csv(paste0(data.dir, "sites_order_z.csv")) # This file has one site with C-qual values
+data.site1 <- read.csv(paste0(data.dir, dir.sub1, "sites_order_z.csv"))
 sites.new1 <- data.site1$FULL_NAME
-sites.new2 <- data.site2$FULL_NAME
 for (i in 1:length(sites.old)) {
-  do.7d.mn.gr$Station <- gsub(sites.old[i], sites.new1[i], do.7d.mn.gr$Station) # Use sites_order_z_TEMP w/o c-qual caveat
-  do.7d.mi.gr$Station <- gsub(sites.old[i], sites.new2[i], do.7d.mi.gr$Station) # Use sites_order_z w/ c-qual caveat
-  do.30d.mn.gr$Station <- gsub(sites.old[i], sites.new2[i], do.30d.mn.gr$Station) # Use sites_order_z w/ c-qual caveat
-  do.day.mi.gr$Station <- gsub(sites.old[i], sites.new2[i], do.day.mi.gr$Station) # Use sites_order_z w/ c-qual caveat
+  do.7d.mn.gr$Station <- gsub(sites.old[i], sites.new1[i], do.7d.mn.gr$Station)
+  do.7d.mi.gr$Station <- gsub(sites.old[i], sites.new1[i], do.7d.mi.gr$Station)
+  do.30d.mn.gr$Station <- gsub(sites.old[i], sites.new1[i], do.30d.mn.gr$Station)
+  do.day.mi.gr$Station <- gsub(sites.old[i], sites.new1[i], do.day.mi.gr$Station)
 }
 # These are added to include a hard return for the legend entries
 do.7d.mn.gr$Station <- gsub("_zz_", "\n", do.7d.mn.gr$Station)
@@ -123,7 +122,7 @@ do.7d.mi.gr$Station <- gsub("_zz_", "\n", do.7d.mi.gr$Station)
 do.30d.mn.gr$Station <- gsub("_zz_", "\n", do.30d.mn.gr$Station)
 do.day.mi.gr$Station <- gsub("_zz_", "\n", do.day.mi.gr$Station)
 
-sta.order <- c(12, 3, 1, 6, 5, 8, 9, 2, 4, 7, 11, 10)
+sta.order <- c(12, 13, 3, 6, 1, 5, 8, 9, 2, 4, 7, 11, 10)
 do.7d.mn.gr$Station <- factor(do.7d.mn.gr$Station, levels(factor(do.7d.mn.gr$Station))[sta.order])
 do.7d.mi.gr$Station <- factor(do.7d.mi.gr$Station, levels(factor(do.7d.mi.gr$Station))[sta.order])
 do.30d.mn.gr$Station <- factor(do.30d.mn.gr$Station, levels(factor(do.30d.mn.gr$Station))[sta.order])
@@ -131,7 +130,7 @@ do.day.mi.gr$Station <- factor(do.day.mi.gr$Station, levels(factor(do.day.mi.gr$
 
 #--------------------------------PLOT DATA--------------------------------------
 #-------------------------------------------------------------------------------
-save.dir <- "C:/Users/rshojin/Desktop/001_projects/mid_coast_DO_tmdls/siletz/002_figures"
+save.dir <- paste0(data.dir, "005_reporting\\figures")
 
 # Rearing criterion 1, 30-day mean minimum concentrations -- NEEDS caveated legend for
 do.30d.mn.plot <- ggplot() + geom_line(data = do.30d.mn.gr, aes(x = DATE, y = value, group = Station, color = Station), size = 1) +
@@ -145,7 +144,7 @@ do.30d.mn.plot <- ggplot() + geom_line(data = do.30d.mn.gr, aes(x = DATE, y = va
                  theme(plot.title = element_text(size = 12, hjust = 0.5), legend.key.size = unit(2, 'lines'),
                        legend.text=element_text(size=8))
 
-ggsave(filename = "fig14_lswcd_doc_30dmn_rear.jpg", plot = do.30d.mn.plot, path = save.dir, width = 8, height = 6, units = "in", dpi = 300)
+ggsave(filename = "fig15_lswcd_doc_30dmn_rear.png", plot = do.30d.mn.plot, path = save.dir, width = 8, height = 6, units = "in", dpi = 300)
 
 # Rearing criterion 2, 7-day minimum mean concentrations
 do.7d.mi.plot <- ggplot() + geom_line(data = do.7d.mi.gr, aes(x = DATE, y = value, group = Station, color = Station), size = 1) +
@@ -159,7 +158,7 @@ do.7d.mi.plot <- ggplot() + geom_line(data = do.7d.mi.gr, aes(x = DATE, y = valu
                  theme(plot.title = element_text(size = 12, hjust = 0.5), legend.key.size = unit(2, 'lines'),
                        legend.text=element_text(size=8))
  
-ggsave(filename = "fig15_lswcd_doc_7dmi_rear.jpg", plot = do.7d.mi.plot, path = save.dir, width = 8, height = 6, units = "in", dpi = 300)
+ggsave(filename = "fig16_lswcd_doc_7dmi_rear.png", plot = do.7d.mi.plot, path = save.dir, width = 8, height = 6, units = "in", dpi = 300)
  
 # Rearing criterion 3, diurnal minimum concentrations
 do.day.mi.plot <- ggplot() + geom_line(data = do.day.mi.gr, aes(x = DATE, y = value, group = Station, color = Station), size = 1) +
@@ -173,7 +172,7 @@ do.day.mi.plot <- ggplot() + geom_line(data = do.day.mi.gr, aes(x = DATE, y = va
                  theme(plot.title = element_text(size = 12, hjust = 0.5), legend.key.size = unit(2, 'lines'),
                        legend.text=element_text(size=8))
  
-ggsave(filename = "Fig16_vol_doc_dimi_rear.jpg", plot = do.day.mi.plot, path = save.dir, width = 8, height = 6, units = "in", dpi = 300)
+ggsave(filename = "Fig17_vol_doc_dimi_rear.png", plot = do.day.mi.plot, path = save.dir, width = 8, height = 6, units = "in", dpi = 300)
  
 # Spawning criterion, 7-day mean minimum concentrations
 do.7d.mn.plot <- ggplot() + geom_line(data = do.7d.mn.gr, aes(x = DATE, y = value, group = Station, color = Station), size = 1) +
@@ -187,4 +186,4 @@ do.7d.mn.plot <- ggplot() + geom_line(data = do.7d.mn.gr, aes(x = DATE, y = valu
                  theme(plot.title = element_text(size = 12, hjust = 0.5), legend.key.size = unit(2, 'lines'),
                  legend.text=element_text(size=8))
 
-ggsave(filename = "fig18_lswcd_doc_7dmn_spwn.jpg", plot = do.7d.mn.plot, path = save.dir, width = 8, height = 6, units = "in", dpi = 300)
+ggsave(filename = "fig19_lswcd_doc_7dmn_spwn.png", plot = do.7d.mn.plot, path = save.dir, width = 8, height = 6, units = "in", dpi = 300)

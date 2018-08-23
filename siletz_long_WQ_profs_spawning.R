@@ -69,6 +69,9 @@ j <- 10
                                axis.title.y = element_blank(),
                                axis.text.y = element_blank()) +
             scale_x_continuous(limits = c(-1, 3), breaks = c(0, 1, 2, 3)) +
+            annotate("text", x = stations$RKm, y = 13.5,
+                     label = paste0(stations$STAID, " - ", stations$Site_ID), angle = 90, size = 3,
+                     hjust = 0) +
             scale_y_continuous(limits = c(6, 16), breaks = c(6, 8, 10, 12, 14)) +
             xlab("River Mile") + ggtitle("Rock Creek") +
             geom_hline(yintercept = 11, color = "blue", size = 0.4, linetype = 2)
