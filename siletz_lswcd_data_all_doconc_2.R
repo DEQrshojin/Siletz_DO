@@ -57,55 +57,24 @@ grph.lbl <- gsub("_zz_", "\n", grph.lbl)
 # panel figures to be included, DO % Sat and Temperature.
 
 save.dir <- paste0(dir, dir.sub2)
-grid.layout <- read.csv(paste0(save.dir, "\\lswcd.layout.csv"), header = FALSE)
-grid.plots <- vector("list", 15) 
+grid.plots <- vector("list", 15)
 mf <- 86400
-# This plot is the bottom left graph and includes the x and y axes
-ind = c(10, 12) # plot index, refers to the 10th and 12th graphs in the series (37396 and 38930)
-for (i in 1 : 2)
-{
-      col.sel <- c("DATE", STAID[ind[i]])
-      tmp <- doc.by.sta[col.sel]
-      names(tmp) <- c("a", "b")
-      doconc.plot <- ggplot(tmp) + geom_point(aes(x = a, y = b), size = .25, shape = 1) +
-                  xlab("Date") + ylab("Dissolved\nOxygen (mg/L)") +
-                  scale_y_continuous(limits = c(5, 15), breaks = c(6, 8, 10, 12, 14)) +
-                  scale_x_datetime(limits = lims.t, breaks=date_breaks("14 days"), labels=date_format("%m/%d")) +
-                  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor=element_blank(),
-                                     axis.title.x = element_blank(),
-                                     axis.text.x = element_text(size = 6),
-                                     axis.title.y = element_text(size = 6),
-                                     axis.text.y = element_text(size = 6)) +
-                  geom_segment(aes(x = dat.R.beg, y = 8, xend = dat.R.end, yend = 8),color = "blue", size = 0.4, linetype = 2) +
-                  geom_segment(aes(x = dat.R.beg, y = 6.5, xend = dat.R.end, yend = 6.5), color = "green", size = 0.4, linetype = 2) +
-                  geom_segment(aes(x = dat.R.beg, y = 6, xend = dat.R.end, yend = 6), color = "orange", size = 0.4, linetype = 2) +
-                  geom_segment(aes(x = dat.S.beg, y = 11, xend = dat.S.end, yend = 11), color = "red", size = 0.4, linetype = 2) +
-                  annotate("text", dat.S.end, 9.65, color = "black", label = "Spawning\n11.0 mg/L", hjust = 1, size = 1.75) +
-                  annotate("rect", xmin = dat.R.end + mf * .5, xmax = dat.R.end + mf * 24, ymin = 7.65, ymax = 8.35, fill = "white", alpha = 1) +
-                  annotate("text", dat.R.end + mf * 1, 8.1, color = "black", label = "Rearing 30d mean min, 8.0 mg/L", hjust = 0, size = 1.75) +
-                  annotate("text", dat.R.end + mf * 1, 6.65, color = "black", label = "Rearing 7d min mean, 6.5 mg/L", hjust = 0, size = 1.75) +
-                  annotate("text", dat.R.end + mf * 1, 5.9, color = "black", label = "Rearing abs min, 6.0 mg/L", hjust = 0, size = 1.75) +
-                  annotate("text", dat.R.beg, 13.5, color = "black", label = grph.lbl[ind[i]], hjust = 0, size = 2)
-      grid.plots[[ind[i]]] <- doconc.plot
-}
-      
-# This plot is the bottom middle and right graphs and includes only the x axis
-ind = c(9, 11, 13) # plot index, refers to the 9th, 11, & 13th graphs in the series (11246, 38912 & 38929)
+# This plot is the bottom left hand graphs and includes the x and y axes
+ind = c(1, 4, 7, 10, 12)
 for (i in 1 : length(ind))
 {
       col.sel <- c("DATE", STAID[ind[i]])
       tmp <- doc.by.sta[col.sel]
       names(tmp) <- c("a", "b")
       doconc.plot <- ggplot(tmp) + geom_point(aes(x = a, y = b), size = .25, shape = 1) +
-                  xlab("Date") + ylab("Dissolved\nOxygen (mg/L)") +
+                  xlab("Date") + ylab("DO (mg/L)") +
                   scale_y_continuous(limits = c(5, 15), breaks = c(6, 8, 10, 12, 14)) +
-                  scale_x_datetime(limits = lims.t, breaks=date_breaks("14 days"), labels=date_format("%m/%d")) +
-                  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor=element_blank(),
+                  scale_x_datetime(limits = lims.t, breaks=date_breaks("1 months"), labels=date_format("%m/%d")) +
+                  theme_bw() + theme(panel.grid.minor=element_blank(),
                                      axis.title.x = element_blank(),
                                      axis.text.x = element_text(size = 6),
-                                     axis.title.y = element_blank(),
-                                     axis.text.y = element_blank(),
-                                     axis.ticks.y = element_blank()) +
+                                     axis.title.y = element_text(size = 6),
+                                     axis.text.y = element_text(size = 6)) +
                   geom_segment(aes(x = dat.R.beg, y = 8, xend = dat.R.end, yend = 8), color = "blue", size = 0.4, linetype = 2) +
                   geom_segment(aes(x = dat.R.beg, y = 6.5, xend = dat.R.end, yend = 6.5), color = "green", size = 0.4, linetype = 2) +
                   geom_segment(aes(x = dat.R.beg, y = 6, xend = dat.R.end, yend = 6), color = "orange", size = 0.4, linetype = 2) +
@@ -118,53 +87,23 @@ for (i in 1 : length(ind))
                   annotate("text", dat.R.beg, 13.5, color = "black", label = grph.lbl[ind[i]], hjust = 0, size = 2)
       grid.plots[[ind[i]]] <- doconc.plot
 }
-
-# These plots are for the left column graphs and only include the y axes
-ind = c(1, 4, 7) # plot index, refers to the 1st, 4th and 7th graphs in the series (38941, 38300 & 38918)
+      
+# These plots are for the remainder of the graphs and only include the x labels
+ind = c(2, 3, 5, 6, 8, 9, 11, 13)
 for (i in 1 : length(ind))
 {
       col.sel <- c("DATE", STAID[ind[i]])
       tmp <- doc.by.sta[col.sel]
       names(tmp) <- c("a", "b")
-      doconc.plot <- ggplot(tmp) + geom_point(aes(x = a, y = b), size = .25, shape = 1) +
-          xlab("Date") + ylab("Dissolved\nOxygen (mg/L)") +
+      doconc.plot <- ggplot(tmp) + geom_point(aes(x = a, y = b), size = .25, shape = 1) + xlab("Date") +
           scale_y_continuous(limits = c(5, 15), breaks = c(6, 8, 10, 12, 14)) +
-          scale_x_datetime(limits = lims.t, breaks=date_breaks("14 days"), labels=date_format("%m/%d")) +
-          theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor=element_blank(),
+          scale_x_datetime(limits = lims.t, breaks=date_breaks("1 months"), labels=date_format("%m/%d")) +
+          theme_bw() + theme(panel.grid.minor=element_blank(),
                              axis.title.x = element_blank(),
-                             axis.text.x = element_blank(),
-                             axis.title.y = element_text(size = 6),
-                             axis.text.y = element_text(size = 6)) +
-          geom_segment(aes(x = dat.R.beg, y = 8, xend = dat.R.end, yend = 8), color = "blue", size = 0.4, linetype = 2) +
-          geom_segment(aes(x = dat.R.beg, y = 6.5, xend = dat.R.end, yend = 6.5), color = "green", size = 0.4, linetype = 2) +
-          geom_segment(aes(x = dat.R.beg, y = 6, xend = dat.R.end, yend = 6), color = "orange", size = 0.4, linetype = 2) +
-          geom_segment(aes(x = dat.S.beg, y = 11, xend = dat.S.end, yend = 11), color = "red", size = 0.4, linetype = 2) +
-          annotate("text", dat.S.end, 9.65, color = "black", label = "Spawning\n11.0 mg/L", hjust = 1, size = 1.75) +
-          annotate("rect", xmin = dat.R.end + mf * .5, xmax = dat.R.end + mf * 24, ymin = 7.65, ymax = 8.35, fill = "white", alpha = 1) +
-          annotate("text", dat.R.end + mf * 1, 8.1, color = "black", label = "Rearing 30d mean min, 8.0 mg/L", hjust = 0, size = 1.75) +
-          annotate("text", dat.R.end + mf * 1, 6.65, color = "black", label = "Rearing 7d min mean, 6.5 mg/L", hjust = 0, size = 1.75) +
-          annotate("text", dat.R.end + mf * 1, 5.9, color = "black", label = "Rearing abs min, 6.0 mg/L", hjust = 0, size = 1.75) +
-          annotate("text", dat.R.beg, 13.5, color = "black", label = grph.lbl[ind[i]], hjust = 0, size = 2)
-      grid.plots[[ind[i]]] <- doconc.plot
-}
-
-# These plots are for the middle and right-hand column graphs and do not include either axis
-ind = c(2, 3, 5, 6, 8) # refers to graphs in pattern similar to above loops
-for (i in 1 : length(ind))
-{
-      col.sel <- c("DATE", STAID[ind[i]])
-      tmp <- doc.by.sta[col.sel]
-      names(tmp) <- c("a", "b")
-      doconc.plot <- ggplot(tmp) + geom_point(aes(x = a, y = b), size = .25, shape = 1) +
-          xlab("Date") + ylab("Dissolved\nOxygen (mg/L)") +
-          scale_y_continuous(limits = c(5, 15), breaks = c(6, 8, 10, 12, 14)) +
-          scale_x_datetime(limits = lims.t, breaks=date_breaks("14 days"), labels=date_format("%m/%d")) +
-          theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor=element_blank(),
+                             axis.text.x = element_text(size = 6),
                              axis.title.y = element_blank(),
                              axis.text.y = element_blank(),
-                             axis.ticks.y = element_blank(),
-                             axis.title.x = element_blank(),
-                             axis.text.x = element_blank()) +
+                             axis.ticks.y = element_blank()) +
           geom_segment(aes(x = dat.R.beg, y = 8, xend = dat.R.end, yend = 8), color = "blue", size = 0.4, linetype = 2) +
           geom_segment(aes(x = dat.R.beg, y = 6.5, xend = dat.R.end, yend = 6.5), color = "green", size = 0.4, linetype = 2) +
           geom_segment(aes(x = dat.R.beg, y = 6, xend = dat.R.end, yend = 6), color = "orange", size = 0.4, linetype = 2) +
@@ -178,23 +117,19 @@ for (i in 1 : length(ind))
       grid.plots[[ind[i]]] <- doconc.plot
 }
 
-lbl <- c("Siletz River Stations", "Rock Creek Stations")
 for (i in 14 : 15)
 {
-    grid.plots[[i]] <- textGrob(lbl[i])
+    grid.plots[[i]] <- rectGrob(gp=gpar(fill="white", lty = 0))
 }
 
-select_grobs <- function(lay) {
-    id <- unique(c(t(lay))) 
-    id[!is.na(id)]
-} 
+x <- grid.arrange(grid.plots[[1]], grid.plots[[2]], grid.plots[[3]],
+                  grid.plots[[4]], grid.plots[[5]], grid.plots[[6]],
+                  grid.plots[[7]], grid.plots[[8]], grid.plots[[9]],
+                  grid.plots[[10]], grid.plots[[11]], grid.plots[[14]],
+                  grid.plots[[12]], grid.plots[[13]], grid.plots[[15]],
+                  ncol = 3, nrow = 5, widths = c(2.7, 2.4, 2.4))
 
-x <- grid.arrange(grobs = grid.plots[select], layout_matrix = grid.layout)
-
-
-                  # widths = c(4.17, 3.83),
-                  # heights = c(rep(1.33, 5), 1.46))
-# ggsave(filename = "fig05_lswcd_do_conc_all.jpg", plot = x, path = save.dir, width = 8, height = 8.123, units = "in", dpi = 300)
+ggsave(filename = "fig06_lswcd_do_conc_all.png", plot = x, path = save.dir, width = 7.5, height = 9, units = "in", dpi = 300)
 
 # PLOT FLOW DATA - INCLUDE THIS SECTION IF YOU WANT TO ADD TWO GRAPHS AT THE BOTTOM TO SHOW FLOW DURING THE MONITORING PERIOD
 # --------------------------------------------------------------------------------------------------------------------------- 

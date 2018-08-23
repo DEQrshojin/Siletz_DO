@@ -31,14 +31,19 @@ data.all$Station <- gsub("_zz_", "\n", data.all$Station)
 # Reformat data into a date/time by column table
 tem.by.sta <- dcast(data.all, data.all$DATE.TIME ~ data.all$STAID, fun = mean, value.var = "TEMP_C")
 #Reorder sites from alphabetical to D/S -> U/S
-col.order <- c(1, 13, 4, 7, 2, 6, 9, 10, 3, 5, 8, 12, 11) # Initial ordering in alphabetical
-tem.by.sta <- tem.by.sta[col.order]
+col.order <- c(1, 13, 14, 4, 7, 2, 6, 9, 10, 3, 5, 8, 12, 11) # Initial ordering in alphabetical
+tem.by.sta <- tem.by.sta[col.order] 
+colnames(tem.by.sta)[colnames(tem.by.sta) == "data.all$DATE.TIME"] <- "DATE"
+tem.by.sta$DATE <- as.POSIXct(tem.by.sta$DATE, "%m/%d/%Y %H:%M", tz = "America/Los_Angeles")
+tem.by.sta <- tem.by.sta[order(tem.by.sta$DATE), ]
 
 # Set criterion date bounds for rearing and spawning (truncated to monitoring periods)
 dat.R.beg <- as.POSIXct("2017-07-01 00:00", tz = "America/Los_Angeles") # Rearing end date
 dat.R.end <- as.POSIXct("2017-08-30 00:00", tz = "America/Los_Angeles") # Rearing end date
 dat.S.beg <- as.POSIXct("2017-09-01 00:00", tz = "America/Los_Angeles") # Spawn start date
 dat.S.end <- as.POSIXct("2017-11-01 00:00", tz = "America/Los_Angeles") # Rearing end date
+
+lims.t <- c(dat.R.beg, dat.S.end)
 
 sites <- read.csv(paste0(dir, dir.sub1, "sites_order_z.csv"))
 STAID <- sites$STATION
@@ -47,100 +52,73 @@ grph.lbl <- gsub("_zz_", "\n", grph.lbl)
 
 #--------------------------------PLOT DATA--------------------------------------
 #-------------------------------------------------------------------------------
+# This sections outputs 13 panel graphs to be included in a figure of 5 x 3 graphs
+# (two empty) of dissolved oxygen concentrations for each of the stations of the
+# Lincoln County Soil and Water Conservation District Volunteer Monitoring Program
+# on the Siletz collected during the summer and fall of 2017. There are two other
+# panel figures to be included, DO % Sat and Temperature.
+
 save.dir <- paste0(dir, dir.sub2)
-grid.plots <- vector("list", 12) 
+grid.plots <- vector("list", 15)
 mf <- 86400
-      i = 6
-      col.sel <- c("data.all$DATE.TIME", STAID[i])
-      tmp <- tem.by.sta[col.sel]
-      names(tmp) <- c("a", "b")
-      doconc.plot <- ggplot(tmp) + geom_point(aes(x = a, y = b), size = .25, shape = 1) +
-                  xlab("Date") + ylab("Temperature (째C)") +
-                  scale_y_continuous(limits = c(0, 30), breaks = c(0, 5, 10, 15, 20, 25, 30)) +
-                  scale_x_datetime(limits = c(dat.R.beg, dat.S.end), breaks=date_breaks("14 days"), labels=date_format("%m/%d")) +
-                  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor=element_blank(),
-                                     axis.title.x = element_blank(),
-                                     axis.text.x = element_text(size = 6), 
-                                     axis.title.y = element_text(size = 6),
-                                     axis.text.y = element_text(size = 6)) +
-                  geom_segment(aes(x = dat.R.beg, y = 16, xend = dat.R.end, yend = 16), color = "blue", size = 0.4, linetype = 2) + 
-                  geom_segment(aes(x = dat.S.beg, y = 13, xend = dat.S.end, yend = 13), color = "red", size = 0.4, linetype = 2) +
-                  annotate("text", dat.S.end, 11.5, color = "black", label = "Spawning, 13째C", hjust = 1, size = 1.75) +
-                  annotate("rect", xmin = dat.R.beg + mf * 0.5, xmax = dat.R.beg + mf * 26, ymin = 86, ymax = 89, fill = "white", alpha = 1) +
-                  annotate("text", dat.R.beg + mf * 1, 14.5, color = "black", label = "Rearing, 16째C", hjust = 0, size = 1.75) +
-                  annotate("text", dat.R.beg, 3, color = "black", label = grph.lbl[i], hjust = 0, size = 2)
-      grid.plots[[i]] <- doconc.plot
-      i = 12
-      col.sel <- c("data.all$DATE.TIME", STAID[i])
-      tmp <- tem.by.sta[col.sel]
-      names(tmp) <- c("a", "b")
-      doconc.plot <- ggplot(tmp) + geom_point(aes(x = a, y = b), size = .25, shape = 1) +
-                  xlab("Date") + ylab("Temperature (째C)") +
-                  scale_y_continuous(limits = c(0, 30), breaks = c(0, 5, 10, 15, 20, 25, 30)) +
-                  scale_x_datetime(limits = c(dat.R.beg, dat.S.end), breaks=date_breaks("14 days"), labels=date_format("%m/%d")) +
-                  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor=element_blank(),
-                                     axis.title.x = element_blank(),
-                                     axis.text.x = element_text(size = 6),
-                                     axis.title.y = element_blank(), 
-                                     axis.text.y = element_blank(),
-                                     axis.ticks.y = element_blank()) +
-                  geom_segment(aes(x = dat.R.beg, y = 16, xend = dat.R.end, yend = 16), color = "blue", size = 0.4, linetype = 2) + 
-                  geom_segment(aes(x = dat.S.beg, y = 13, xend = dat.S.end, yend = 13), color = "red", size = 0.4, linetype = 2) +
-                  annotate("text", dat.S.end, 11.5, color = "black", label = "Spawning, 13째C", hjust = 1, size = 1.75) +
-                  annotate("rect", xmin = dat.R.beg + mf * 0.5, xmax = dat.R.beg + mf * 26, ymin = 86, ymax = 89, fill = "white", alpha = 1) +
-                  annotate("text", dat.R.beg + mf * 1, 14.5, color = "black", label = "Rearing, 16째C", hjust = 0, size = 1.75) +
-                  annotate("text", dat.R.beg, 3, color = "black", label = grph.lbl[i], hjust = 0, size = 2)
-      grid.plots[[i]] <- doconc.plot
-      for (i in 1 : 5) {
-              col.sel <- c("data.all$DATE.TIME", STAID[i])
-              tmp <- tem.by.sta[col.sel]
-              names(tmp) <- c("a", "b")
-              doconc.plot <- ggplot(tmp) + geom_point(aes(x = a, y = b), size = .25, shape = 1) +
-                  xlab("Date") + ylab("Temperature (째C)") +
-                  scale_y_continuous(limits = c(0, 30), breaks = c(0, 5, 10, 15, 20, 25, 30)) +
-                  scale_x_datetime(limits = c(dat.R.beg, dat.S.end), breaks=date_breaks("14 days"), labels=date_format("%m/%d")) +
-                  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor=element_blank(),
-                                     axis.title.x = element_blank(),
-                                     axis.text.x = element_blank(),
-                                     axis.title.y = element_text(size = 6),
-                                     axis.text.y = element_text(size = 6)) +
-                  geom_segment(aes(x = dat.R.beg, y = 16, xend = dat.R.end, yend = 16), color = "blue", size = 0.4, linetype = 2) + 
-                  geom_segment(aes(x = dat.S.beg, y = 13, xend = dat.S.end, yend = 13), color = "red", size = 0.4, linetype = 2) +
-                  annotate("text", dat.S.end, 11.5, color = "black", label = "Spawning, 13째C", hjust = 1, size = 1.75) +
-                  annotate("rect", xmin = dat.R.beg + mf * 0.5, xmax = dat.R.beg + mf * 26, ymin = 86, ymax = 89, fill = "white", alpha = 1) +  
-                  annotate("text", dat.R.beg + mf * 1, 14.5, color = "black", label = "Rearing, 16째C", hjust = 0, size = 1.75) +
-                  annotate("text", dat.R.beg, 3, color = "black", label = grph.lbl[i], hjust = 0, size = 2)
-              grid.plots[[i]] <- doconc.plot
-      }
-      for (i in 7 : 11) {
-              col.sel <- c("data.all$DATE.TIME", STAID[i])
-              tmp <- tem.by.sta[col.sel]
-              names(tmp) <- c("a", "b")
-              doconc.plot <- ggplot(tmp) + geom_point(aes(x = a, y = b), size = .25, shape = 1) +
-                  xlab("Date") + ylab("Temperature (째C)") +
-                  scale_y_continuous(limits = c(0, 30), breaks = c(0, 5, 10, 15, 20, 25, 30)) +
-                  scale_x_datetime(limits = c(dat.R.beg, dat.S.end), breaks=date_breaks("14 days"), labels=date_format("%m/%d")) +
-                  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor=element_blank(),
-                                     axis.title.y = element_blank(),
-                                     axis.text.y = element_blank(),
-                                     axis.ticks.y = element_blank(),
-                                     axis.title.x = element_blank(),
-                                     axis.text.x = element_blank()) +
-                  geom_segment(aes(x = dat.R.beg, y = 16, xend = dat.R.end, yend = 16), color = "blue", size = 0.4, linetype = 2) + 
-                  geom_segment(aes(x = dat.S.beg, y = 13, xend = dat.S.end, yend = 13), color = "red", size = 0.4, linetype = 2) +
-                  annotate("text", dat.S.end, 11.5, color = "black", label = "Spawning, 13째C", hjust = 1, size = 1.75) +
-                  annotate("rect", xmin = dat.R.beg + mf * 0.5, xmax = dat.R.beg + mf * 26, ymin = 86, ymax = 89, fill = "white", alpha = 1) +
-                  annotate("text", dat.R.beg + mf * 1, 14.5, color = "black", label = "Rearing, 16째C", hjust = 0, size = 1.75) +
-                  annotate("text", dat.R.beg, 3, color = "black", label = grph.lbl[i], hjust = 0, size = 2)
-              grid.plots[[i]] <- doconc.plot
-      }
-      x <- grid.arrange(grid.plots[[1]], grid.plots[[7]],
-                        grid.plots[[2]], grid.plots[[8]],
-                        grid.plots[[3]], grid.plots[[9]],
-                        grid.plots[[4]], grid.plots[[10]],
-                        grid.plots[[5]], grid.plots[[11]],
-                        grid.plots[[6]], grid.plots[[12]], 
-                        ncol = 2, widths = c(4.17, 3.83),
-                        heights = c(rep(1.33, 5), 1.46))
-      ggsave(filename = "fig07_lswcd_temp_all.jpg", plot = x, path = save.dir, width = 8, height = 8, units = "in", dpi = 300)
+# This plot is the bottom left hand graphs and includes the x and y axes
+ind = c(1, 4, 7, 10, 12)
+for (i in 1 : length(ind))
+{
+    col.sel <- c("DATE", STAID[ind[i]])
+    tmp <- tem.by.sta[col.sel]
+    names(tmp) <- c("a", "b")
+    grid.plots[[ind[i]]] <- ggplot(tmp) + geom_point(aes(x = a, y = b), size = .25, shape = 1) + ylab("Temperature (캜)") +
+          scale_y_continuous(limits = c(0, 30), breaks = c(0, 5, 10, 15, 20, 25, 30)) +
+          scale_x_datetime(limits = lims.t, breaks=date_breaks("1 months"), labels=date_format("%m/%d")) +
+          theme_bw() + theme(panel.grid.minor=element_blank(),
+                             axis.title.x = element_blank(),
+                             axis.text.x = element_text(size = 6), 
+                             axis.title.y = element_text(size = 6),
+                             axis.text.y = element_text(size = 6)) +
+          geom_segment(aes(x = dat.R.beg, y = 16, xend = dat.R.end, yend = 16), color = "blue", size = 0.4, linetype = 2) + 
+          geom_segment(aes(x = dat.S.beg, y = 13, xend = dat.S.end, yend = 13), color = "red", size = 0.4, linetype = 2) +
+          annotate("text", dat.S.end, 11.5, color = "black", label = "Spawning, 13캜", hjust = 1, size = 1.75) +
+          annotate("rect", xmin = dat.R.beg + mf * 0.5, xmax = dat.R.beg + mf * 26, ymin = 86, ymax = 89, fill = "white", alpha = 1) +
+          annotate("text", dat.R.beg + mf * 1, 14.5, color = "black", label = "Rearing, 16캜", hjust = 0, size = 1.75) +
+          annotate("text", dat.R.beg, 3, color = "black", label = grph.lbl[i], hjust = 0, size = 2)
+}
+
+# These plots are for the remainder of the graphs and only include the x labels
+ind = c(2, 3, 5, 6, 8, 9, 11, 13)
+for (i in 1 : length(ind))
+{
+    col.sel <- c("DATE", STAID[ind[i]])
+    tmp <- tem.by.sta[col.sel]
+    names(tmp) <- c("a", "b")
+    grid.plots[[ind[i]]] <- ggplot(tmp) + geom_point(aes(x = a, y = b), size = .25, shape = 1) +
+          scale_y_continuous(limits = c(0, 30), breaks = c(0, 5, 10, 15, 20, 25, 30)) +
+          scale_x_datetime(limits = lims.t, breaks=date_breaks("1 months"), labels=date_format("%m/%d")) +
+          theme_bw() + theme(panel.grid.minor=element_blank(),
+                             axis.title.x = element_blank(),
+                             axis.text.x = element_text(size = 6),
+                             axis.title.y = element_blank(), 
+                             axis.text.y = element_blank(),
+                             axis.ticks.y = element_blank()) +
+          geom_segment(aes(x = dat.R.beg, y = 16, xend = dat.R.end, yend = 16), color = "blue", size = 0.4, linetype = 2) + 
+          geom_segment(aes(x = dat.S.beg, y = 13, xend = dat.S.end, yend = 13), color = "red", size = 0.4, linetype = 2) +
+          annotate("text", dat.S.end, 11.5, color = "black", label = "Spawning, 13캜", hjust = 1, size = 1.75) +
+          annotate("rect", xmin = dat.R.beg + mf * 0.5, xmax = dat.R.beg + mf * 26, ymin = 86, ymax = 89, fill = "white", alpha = 1) +
+          annotate("text", dat.R.beg + mf * 1, 14.5, color = "black", label = "Rearing, 16캜", hjust = 0, size = 1.75) +
+          annotate("text", dat.R.beg, 3, color = "black", label = grph.lbl[i], hjust = 0, size = 2)
+}
+
+for (i in 14 : 15)
+{
+    grid.plots[[i]] <- rectGrob(gp=gpar(fill="white", lty = 0))
+}
+
+x <- grid.arrange(grid.plots[[1]], grid.plots[[2]], grid.plots[[3]],
+                  grid.plots[[4]], grid.plots[[5]], grid.plots[[6]],
+                  grid.plots[[7]], grid.plots[[8]], grid.plots[[9]],
+                  grid.plots[[10]], grid.plots[[11]], grid.plots[[14]],
+                  grid.plots[[12]], grid.plots[[13]], grid.plots[[15]],
+                  ncol = 3, nrow = 5, widths = c(2.7, 2.4, 2.4))
+
+ggsave(filename = "fig08_lswcd_temp_all.png", plot = x, path = save.dir, width = 8, height = 8, units = "in", dpi = 300)
       
