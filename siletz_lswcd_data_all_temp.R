@@ -120,5 +120,5 @@ x <- grid.arrange(grid.plots[[1]], grid.plots[[2]], grid.plots[[3]],
                   grid.plots[[12]], grid.plots[[13]], grid.plots[[15]],
                   ncol = 3, nrow = 5, widths = c(2.7, 2.4, 2.4))
 
-ggsave(filename = "fig08_lswcd_temp_all.png", plot = x, path = save.dir, width = 8, height = 8, units = "in", dpi = 300)
+ggsave(filename = "fig08_lswcd_temp_all.png", plot = x, path = save.dir, width = 7.5, height = 9, units = "in", dpi = 300)
       

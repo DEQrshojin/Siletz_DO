@@ -131,20 +131,4 @@ x <- grid.arrange(grid.plots[[1]], grid.plots[[2]], grid.plots[[3]],
 
 ggsave(filename = "fig06_lswcd_do_conc_all.png", plot = x, path = save.dir, width = 7.5, height = 9, units = "in", dpi = 300)
 
-# PLOT FLOW DATA - INCLUDE THIS SECTION IF YOU WANT TO ADD TWO GRAPHS AT THE BOTTOM TO SHOW FLOW DURING THE MONITORING PERIOD
-# --------------------------------------------------------------------------------------------------------------------------- 
-# data.q <- read.csv("C:/Users/rshojin/Desktop/001_projects/mid_coast_DO_tmdls/siletz/001_data/flow/flow_test.csv")
-# data.q$datetime <- as.POSIXct(data.q$datetime, "%Y-%m-%d %H:%M:%S", tz = "America/Los_Angeles")
-# q.plot1 <-  ggplot(data.q) + geom_point(aes(x = datetime, y = instantaneous_flow_cfs), size = .25, shape = 1) +
-#     ylab("Flow (cfs)") + scale_y_log10(limits = c(10, 30000), breaks = c(10, 100, 1000, 10000), labels = scientific) +
-#     scale_x_datetime(limits = lims.t, breaks=date_breaks("14 days"), labels=date_format("%m/%d")) +
-#     theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-#                        axis.title.x = element_blank(), axis.text.x = element_text(size = 6),
-#                        axis.title.y = element_text(size = 1), axis.text.y = element_text(size = 6))
-# q.plot2 <-  ggplot(data.q) + geom_point(aes(x = datetime, y = instantaneous_flow_cfs), size = .25, shape = 1) +
-#     ylab("Flow (cfs)") + scale_y_log10(limits = c(10, 30000), breaks = c(10, 100, 1000, 10000), labels = scientific) +
-#     scale_x_datetime(limits = lims.t, breaks=date_breaks("14 days"), labels=date_format("%m/%d")) +
-#     theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-#                        axis.title.x = element_blank(), axis.text.x = element_text(size = 6),
-#                        axis.title.y = element_blank(), axis.text.y = element_blank(),
-#                        axis.ticks.y = element_blank())
+
