@@ -14,19 +14,22 @@ library(gridExtra)
 library(ggplot2)
 library(lattice)
 
-#----------DATA IMPORT AND AUDITING (REMOVE NA & D-QUALITY DATA)----------
-#-------------------------------------------------------------------------------
-# Import data from master data file
+# Import data from master data file----------
 dir <- "\\\\deqhq1\\tmdl\\TMDL_WR\\MidCoast\\Models\\Dissolved Oxygen\\Middle_Siletz_River_1710020405"
 dir.sub1 <- "\\001_data\\wq_data\\Monitoring 2017\\LSWCD\\Lincoln_SWCD_SILETZ RIVER_06292017-01052018\\"
 dir.sub2 <- "\\005_reporting\\figures"
-
 data.all <- read.csv(paste0(dir, dir.sub1, "siletz_volmon_cont_data.csv"))
 data.all$DATE.TIME <- as.POSIXct(data.all$DATE.TIME, "%m/%d/%Y %H:%M", tz = "America/Los_Angeles")
 data.all <- data.all[complete.cases(data.all[, 5:8]), ] # Remove NA
-# Replace STAID as integers to Full Names and create factors for station list and reorder
+data.all$STAID[data.all$STAID == 10391] <- 29287 # Replace 10391 with 29287
+sites <- read.csv(paste0(dir, dir.sub1, "sites_order_z.csv")) # import site list
+STAID <- sites$STATION
+grph.lbl <- sites$FULL_NAME
+grph.lbl <- gsub("_zz_", "\n", grph.lbl)
+
+# Replace STAID as integers to Full Names and create factors for station list and reorder----------
 data.all$Station <- gsub("_zz_", "\n", data.all$Station)
-# Reformat data into a date/time by column table
+# Reformat data into a date/time by column table----------
 doc.by.sta <- dcast(data.all, data.all$DATE.TIME ~ data.all$STAID, fun = mean, value.var = "DO_mgL")
 #Reorder sites from alphabetical to D/S -> U/S
 col.order <- c(1, 13, 14, 4, 7, 2, 6, 9, 10, 3, 5, 8, 12, 11) # Initial ordering in alphabetical
@@ -35,31 +38,26 @@ colnames(doc.by.sta)[colnames(doc.by.sta) == "data.all$DATE.TIME"] <- "DATE"
 doc.by.sta$DATE <- as.POSIXct(doc.by.sta$DATE, "%m/%d/%Y %H:%M", tz = "America/Los_Angeles")
 doc.by.sta <- doc.by.sta[order(doc.by.sta$DATE), ]
 
-# Set criterion date bounds for rearing and spawning (truncated to monitoring periods)
+# Set criterion date bounds for rearing and spawning (truncated to monitoring periods)----------
 dat.R.beg <- as.POSIXct("2017-07-01 00:00", tz = "America/Los_Angeles") # Rearing end date
 dat.R.end <- as.POSIXct("2017-08-30 00:00", tz = "America/Los_Angeles") # Rearing end date
 dat.S.beg <- as.POSIXct("2017-09-01 00:00", tz = "America/Los_Angeles") # Spawn start date
 dat.S.end <- as.POSIXct("2017-11-01 00:00", tz = "America/Los_Angeles") # Rearing end date
-
 lims.t <- c(dat.R.beg, dat.S.end)
 
-sites <- read.csv(paste0(dir, dir.sub1, "sites_order_z.csv"))
-STAID <- sites$STATION
-grph.lbl <- sites$FULL_NAME
-grph.lbl <- gsub("_zz_", "\n", grph.lbl)
-
-#--------------------------------PLOT DATA--------------------------------------
-#-------------------------------------------------------------------------------
+#_________________________________________________________________________________________
 # This sections outputs 13 panel graphs to be included in a figure of 5 x 3 graphs
 # (two empty) of dissolved oxygen concentrations for each of the stations of the
 # Lincoln County Soil and Water Conservation District Volunteer Monitoring Program
 # on the Siletz collected during the summer and fall of 2017. There are two other
 # panel figures to be included, DO % Sat and Temperature.
+#_________________________________________________________________________________________
 
 save.dir <- paste0(dir, dir.sub2)
 grid.plots <- vector("list", 15)
 mf <- 86400
-# This plot is the bottom left hand graphs and includes the x and y axes
+
+# This plot is the bottom left hand graphs and includes the x and y axes ----
 ind = c(1, 4, 7, 10, 12)
 for (i in 1 : length(ind))
 {
@@ -88,7 +86,7 @@ for (i in 1 : length(ind))
       grid.plots[[ind[i]]] <- doconc.plot
 }
       
-# These plots are for the remainder of the graphs and only include the x labels
+# These plots are for the remainder of the graphs and only include the x labels ----
 ind = c(2, 3, 5, 6, 8, 9, 11, 13)
 for (i in 1 : length(ind))
 {
@@ -117,7 +115,8 @@ for (i in 1 : length(ind))
       grid.plots[[ind[i]]] <- doconc.plot
 }
 
-for (i in 14 : 15)
+# Creates the grid and prints to .png ----
+for (i in 14 : 15) # Create white panel grobs for empty spaces
 {
     grid.plots[[i]] <- rectGrob(gp=gpar(fill="white", lty = 0))
 }

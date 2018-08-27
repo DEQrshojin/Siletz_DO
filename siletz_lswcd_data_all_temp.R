@@ -26,6 +26,7 @@ dir.sub2 <- "\\005_reporting\\figures"
 data.all <- read.csv(paste0(dir, dir.sub1, "siletz_volmon_cont_data.csv"))
 data.all$DATE.TIME <- as.POSIXct(data.all$DATE.TIME, "%m/%d/%Y %H:%M", tz = "America/Los_Angeles")
 data.all <- data.all[complete.cases(data.all[, 5]), ] # Remove NA
+data.all$STAID[data.all$STAID == 10391] <- 29287 # Replace 10391 with 29287
 # Replace STAID as integers to Full Names and create factors for station list and reorder
 data.all$Station <- gsub("_zz_", "\n", data.all$Station)
 # Reformat data into a date/time by column table
