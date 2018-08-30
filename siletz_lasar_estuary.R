@@ -132,6 +132,6 @@ box.Sal <- ggplot() + geom_boxplot(data = Sal.4, aes(x = STAID, y = Sal_ppt), ou
 dir <- "\\\\deqhq1\\tmdl\\TMDL_WR\\MidCoast\\Models\\Dissolved Oxygen\\Middle_Siletz_River_1710020405\\005_reporting\\figures\\"
 ggsave(filename = "FigXX_Salinity_Estuary.jpg", plot = box.Sal, path = dir, width = 8, height = 8, units = "in", dpi = 300)
 
-
+write.csv(Sal.4, "\\\\deqhq1\\tmdl\\TMDL_WR\\MidCoast\\Models\\Dissolved Oxygen\\Middle_Siletz_River_1710020405\\sal_lasar_2009.csv")
 
 

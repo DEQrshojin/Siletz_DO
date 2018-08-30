@@ -40,11 +40,11 @@ colnames(dos.by.sta)[colnames(dos.by.sta) == "data.all$DATE.TIME"] <- "DATE"
 dos.by.sta$DATE <- as.POSIXct(dos.by.sta$DATE, "%m/%d/%Y %H:%M", tz = "America/Los_Angeles")
 dos.by.sta <- dos.by.sta[order(dos.by.sta$DATE), ]
 
-# Set criterion date bounds for rearing and spawning (truncated to monitoring periods)
-dat.R.beg <- as.POSIXct("2017-07-01 00:00", tz = "America/Los_Angeles") # Rearing end date
-dat.R.end <- as.POSIXct("2017-08-30 00:00", tz = "America/Los_Angeles") # Rearing end date
+# Set criterion date bounds for Cold-water and spawning (truncated to monitoring periods)
+dat.R.beg <- as.POSIXct("2017-07-01 00:00", tz = "America/Los_Angeles") # Cold-water end date
+dat.R.end <- as.POSIXct("2017-08-30 00:00", tz = "America/Los_Angeles") # Cold-water end date
 dat.S.beg <- as.POSIXct("2017-09-01 00:00", tz = "America/Los_Angeles") # Spawn start date
-dat.S.end <- as.POSIXct("2017-11-01 00:00", tz = "America/Los_Angeles") # Rearing end date
+dat.S.end <- as.POSIXct("2017-11-01 00:00", tz = "America/Los_Angeles") # Cold-water end date
 
 lims.t <- c(dat.R.beg, dat.S.end)
 
@@ -83,7 +83,7 @@ for (i in 1 : length(ind))
           geom_segment(aes(x = dat.S.beg, y = 95, xend = dat.S.end, yend = 95), color = "red", size = 0.4, linetype = 2) +
           annotate("text", dat.S.end, 87, color = "black", label = "Spawning,\n95 percent", hjust = 1, size = 1.75) +
           annotate("rect", xmin = dat.R.beg + mf * 0.5, xmax = dat.R.beg + mf * 26, ymin = 83, ymax = 86, fill = "white", alpha = 1) +
-          annotate("text", dat.R.beg + mf * 1, 85, color = "black", label = "Rearing, 90 percent", hjust = 0, size = 1.75) +
+          annotate("text", dat.R.beg + mf * 1, 85, color = "black", label = "Cold-water, 90 percent", hjust = 0, size = 1.75) +
           annotate("text", dat.R.beg, 135, color = "black", label = grph.lbl[ind[i]], hjust = 0, size = 2)
 }
 
@@ -107,7 +107,7 @@ for (i in 1 : length(ind))
           geom_segment(aes(x = dat.S.beg, y = 95, xend = dat.S.end, yend = 95), color = "red", size = 0.4, linetype = 2) +
           annotate("text", dat.S.end, 87, color = "black", label = "Spawning,\n95 percent", hjust = 1, size = 1.75) +
           annotate("rect", xmin = dat.R.beg + mf * 0.5, xmax = dat.R.beg + mf * 26, ymin = 83, ymax = 86, fill = "white", alpha = 1) +
-          annotate("text", dat.R.beg + mf * 1, 85, color = "black", label = "Rearing, 90 percent", hjust = 0, size = 1.75) +
+          annotate("text", dat.R.beg + mf * 1, 85, color = "black", label = "Cold-water, 90 percent", hjust = 0, size = 1.75) +
           annotate("text", dat.R.beg, 135, color = "black", label = grph.lbl[ind[i]], hjust = 0, size = 2)
 }
 

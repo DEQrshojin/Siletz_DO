@@ -63,9 +63,9 @@ j <- 9
             geom_hline(yintercept = 8, color = "blue", size = 0.4, linetype = 2) +
             geom_hline(yintercept = 6.5, color = "green", size = 0.4, linetype = 2) +
             geom_hline(yintercept = 6, color = "orange", size = 0.4, linetype = 2) +
-            annotate("text", 53, 8.15, label = "Rearing 30d mean min, 8.0 mg/L", hjust = 0, size = 3.0) +
-            annotate("text", 53, 6.65, label = "Rearing 7d min mean, 6.5 mg/L", hjust = 0, size = 3.0) +
-            annotate("text", 53, 6.15, label = "Rearing absolute min, 6.0 mg/L", hjust = 0, size = 3.0)
+            annotate("text", 53, 8.15, label = "Cold-water 30d mean min, 8.0 mg/L", hjust = 0, size = 3.0) +
+            annotate("text", 53, 6.65, label = "Cold-water 7d min mean, 6.5 mg/L", hjust = 0, size = 3.0) +
+            annotate("text", 53, 6.15, label = "Cold-water absolute min, 6.0 mg/L", hjust = 0, size = 3.0)
 
         box.Rock[[i]] <- ggplot() + geom_boxplot(data = subset(data.bxplt, (SEASON == seas[i] & River == "Rock Creek")),
                                                  aes(x = RKm, y = DO_mgL, group = RKm), outlier.shape = 1, outlier.size = 1) +
@@ -107,7 +107,7 @@ j <- 9
             geom_segment(aes(x = 46.9, y = 60, xend = 46.9, yend = 90), color = "gray48", size = 1,
                          arrow = arrow(length = unit(0.05, "inches"))) +
             annotate("text", 53, 93, color = "black",
-                     label = "Rearing Minimum, 90 percent", hjust = 0, size = 3) +
+                     label = "Cold-water Minimum, 90 percent", hjust = 0, size = 3) +
             geom_hline(yintercept = 90.0, color = "blue", size = 0.4, linetype = 2)
         
         box.Rock[[i]] <- ggplot() + geom_boxplot(data = subset(data.bxplt, (SEASON == seas[i] & River == "Rock Creek")),
@@ -147,7 +147,7 @@ j <- 9
             geom_segment(aes(x = 46.9, y = 3, xend = 46.9, yend = 15), color = "gray48", size = 1,
                          arrow = arrow(length = unit(0.05, "inches"))) +
             annotate("text", 53, 16.75, color = "black",
-                     label = "Rearing 7DAD Maximum, 16°C", hjust = 0, size = 3.0) +
+                     label = "Cold-water 7DAD Maximum, 16°C", hjust = 0, size = 3.0) +
             geom_hline(yintercept = 16, color = "blue", size = 0.4, linetype = 2)
         
         box.Rock[[i]] <- ggplot() + geom_boxplot(data = subset(data.bxplt, (SEASON == seas[i] & River == "Rock Creek")),

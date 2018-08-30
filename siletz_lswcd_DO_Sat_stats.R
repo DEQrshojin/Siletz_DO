@@ -37,8 +37,8 @@ colnames(dos.day.mn)[colnames(dos.day.mn)=="data.tmp$DATE"] <- "DATE"
 dos.30d.mn <- dos.day.mn 
 dos.7d.mn <- dos.day.mn
 # Rear/spawn period dates
-dat.R.beg <- min(dos.day.mn$DATE) # Rearing start date
-dat.R.end <- as.Date("2017-08-30", tz = "America/Los_Angeles") # Rearing end date
+dat.R.beg <- min(dos.day.mn$DATE) # Cold-water start date
+dat.R.end <- as.Date("2017-08-30", tz = "America/Los_Angeles") # Cold-water end date
 dat.S.beg <- as.Date("2017-09-07", tz = "America/Los_Angeles") # Spawn start date
 dat.S.end <- max(dos.day.mn$DATE) # Spawn end date
 # Rear/spawn period index values
@@ -48,7 +48,7 @@ ind.S.end <- which(dos.day.mn$DATE == dat.S.end)
 
 # Create table of 7D mean-min and 7D min-mean of DO at 100 per cent sat 
 for (j in 1:length(STAID_vctr)) {
-  # Calculate rolling average of daily mean/min for Rearing Period; i refers to dates, j refers to stations
+  # Calculate rolling average of daily mean/min for Cold-water Period; i refers to dates, j refers to stations
   for (i in 1:ind.R.end) {
     if (dos.day.mn[i, 1] < dat.R.beg + 7) {
       dos.7d.mn[i, j + 1] <- NaN
@@ -70,7 +70,7 @@ for (j in 1:length(STAID_vctr)) {
 
 # Create table of 30D mean-min of DO at 100 per cent sat 
 for (j in 1:length(STAID_vctr)) {
-  # Calculate rolling average of daily mean/min for Rearing Period; i refers to dates, j refers to stations
+  # Calculate rolling average of daily mean/min for Cold-water Period; i refers to dates, j refers to stations
   for (i in 1:ind.R.end) {
     if (dos.day.mn[i, 1] < dat.R.beg + 30) {
       dos.30d.mn[i, j + 1] <- mean(dos.day.mn[1:i, j + 1], na.rm = TRUE)
@@ -113,7 +113,7 @@ dos.30d.mn.gr$Station <- factor(dos.30d.mn.gr$Station, levels(factor(dos.30d.mn.
 
 #--------------------------------PLOT DATA--------------------------------------
 save.dir <- paste0(data.dir, "005_reporting\\figures")
-# Rearing criterion 1, 30-day mean minimum concentrations
+# Cold-water criterion 1, 30-day mean minimum concentrations
 dos.30d.mn.plot <- ggplot() + geom_line(data = dos.30d.mn.gr, aes(x = DATE, y = value, group = Station, color = Station), size = 1) +
                  scale_color_hue(h = c(0, 180), l = 85, c = 75) +
                  xlab("Date") + ylab("Dissolved Oxygen (% Saturation)") +
@@ -121,7 +121,7 @@ dos.30d.mn.plot <- ggplot() + geom_line(data = dos.30d.mn.gr, aes(x = DATE, y = 
                  scale_y_continuous(limits = c(80, 110), breaks = c(80, 90, 100, 110, 110)) +
                  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor=element_blank()) +
                  geom_segment(aes(x = dat.R.beg, y = 90, xend = dat.R.end, yend = 90), color = "blue", size = .5, linetype = 2) +
-                 annotate("text", dat.R.end - 21, 89, color = "black", label = "Rearing Minimum, 90%", hjust = 0.25) +
+                 annotate("text", dat.R.end - 21, 89, color = "black", label = "Cold-water Minimum, 90%", hjust = 0.25) +
                  theme(plot.title = element_text(size = 12, hjust = 0.5), legend.key.size = unit(2, 'lines'),
                        legend.text=element_text(size=8))
 

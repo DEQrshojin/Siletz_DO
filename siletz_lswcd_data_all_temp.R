@@ -38,11 +38,11 @@ colnames(tem.by.sta)[colnames(tem.by.sta) == "data.all$DATE.TIME"] <- "DATE"
 tem.by.sta$DATE <- as.POSIXct(tem.by.sta$DATE, "%m/%d/%Y %H:%M", tz = "America/Los_Angeles")
 tem.by.sta <- tem.by.sta[order(tem.by.sta$DATE), ]
 
-# Set criterion date bounds for rearing and spawning (truncated to monitoring periods)
-dat.R.beg <- as.POSIXct("2017-07-01 00:00", tz = "America/Los_Angeles") # Rearing end date
-dat.R.end <- as.POSIXct("2017-08-30 00:00", tz = "America/Los_Angeles") # Rearing end date
+# Set criterion date bounds for Cold-water and spawning (truncated to monitoring periods)
+dat.R.beg <- as.POSIXct("2017-07-01 00:00", tz = "America/Los_Angeles") # Cold-water end date
+dat.R.end <- as.POSIXct("2017-08-30 00:00", tz = "America/Los_Angeles") # Cold-water end date
 dat.S.beg <- as.POSIXct("2017-09-01 00:00", tz = "America/Los_Angeles") # Spawn start date
-dat.S.end <- as.POSIXct("2017-11-01 00:00", tz = "America/Los_Angeles") # Rearing end date
+dat.S.end <- as.POSIXct("2017-11-01 00:00", tz = "America/Los_Angeles") # Cold-water end date
 
 lims.t <- c(dat.R.beg, dat.S.end)
 
@@ -52,7 +52,6 @@ grph.lbl <- sites$FULL_NAME
 grph.lbl <- gsub("_zz_", "\n", grph.lbl)
 
 #--------------------------------PLOT DATA--------------------------------------
-#-------------------------------------------------------------------------------
 # This sections outputs 13 panel graphs to be included in a figure of 5 x 3 graphs
 # (two empty) of dissolved oxygen concentrations for each of the stations of the
 # Lincoln County Soil and Water Conservation District Volunteer Monitoring Program
@@ -81,8 +80,8 @@ for (i in 1 : length(ind))
           geom_segment(aes(x = dat.S.beg, y = 13, xend = dat.S.end, yend = 13), color = "red", size = 0.4, linetype = 2) +
           annotate("text", dat.S.end, 11.5, color = "black", label = "Spawning, 13°C", hjust = 1, size = 1.75) +
           annotate("rect", xmin = dat.R.beg + mf * 0.5, xmax = dat.R.beg + mf * 26, ymin = 86, ymax = 89, fill = "white", alpha = 1) +
-          annotate("text", dat.R.beg + mf * 1, 14.5, color = "black", label = "Rearing, 16°C", hjust = 0, size = 1.75) +
-          annotate("text", dat.R.beg, 3, color = "black", label = grph.lbl[i], hjust = 0, size = 2)
+          annotate("text", dat.R.beg + mf * 1, 14.5, color = "black", label = "Cold-water, 16°C", hjust = 0, size = 1.75) +
+          annotate("text", dat.R.beg, 3, color = "black", label = grph.lbl[ind[i]], hjust = 0, size = 2)
 }
 
 # These plots are for the remainder of the graphs and only include the x labels
@@ -105,8 +104,8 @@ for (i in 1 : length(ind))
           geom_segment(aes(x = dat.S.beg, y = 13, xend = dat.S.end, yend = 13), color = "red", size = 0.4, linetype = 2) +
           annotate("text", dat.S.end, 11.5, color = "black", label = "Spawning, 13°C", hjust = 1, size = 1.75) +
           annotate("rect", xmin = dat.R.beg + mf * 0.5, xmax = dat.R.beg + mf * 26, ymin = 86, ymax = 89, fill = "white", alpha = 1) +
-          annotate("text", dat.R.beg + mf * 1, 14.5, color = "black", label = "Rearing, 16°C", hjust = 0, size = 1.75) +
-          annotate("text", dat.R.beg, 3, color = "black", label = grph.lbl[i], hjust = 0, size = 2)
+          annotate("text", dat.R.beg + mf * 1, 14.5, color = "black", label = "Cold-water, 16°C", hjust = 0, size = 1.75) +
+          annotate("text", dat.R.beg, 3, color = "black", label = grph.lbl[ind[i]], hjust = 0, size = 2)
 }
 
 for (i in 14 : 15)

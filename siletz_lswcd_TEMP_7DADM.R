@@ -99,7 +99,7 @@ temp.7d.mx.plot <- ggplot() + geom_line(data = temp.7d.mx.gr, aes(x = DATE, y = 
                   theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor=element_blank()) +
                   geom_segment(aes(x = dat.R.beg, y = 16, xend = dat.R.end + 1, yend = 16), color = "black", size = 0.5) +
                   geom_segment(aes(x = dat.R.end + 1, y = 13, xend = dat.S.end, yend = 13), color = "black", size = 0.5) +
-                  annotate("text", dat.R.beg, 15.3, color = "black", label = "Rearing Maximum, 16°C", hjust = 0, size = 3) +
+                  annotate("text", dat.R.beg, 15.3, color = "black", label = "Cold-water Maximum, 16°C", hjust = 0, size = 3) +
                   annotate("text", dat.S.end - 45, 12, color = "black", label = "Spawning\nMaximum, 13.0°C", hjust = 0, size = 3) +
                   theme(plot.title = element_text(size = 12, hjust = 0.5), legend.text=element_text(size=8), legend.key.size = unit(2, 'lines'))
 

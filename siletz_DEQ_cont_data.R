@@ -73,9 +73,9 @@ doconc.R.plots <-  ggplot(data = data.R, aes(x = DATE_TIME, y = DOmgL, group = S
              geom_hline(yintercept = 8, color = "blue", size = 0.4, linetype = 2) +
              geom_hline(yintercept = 6.5, color = "green", size = 0.4, linetype = 2) +
              geom_hline(yintercept = 6, color = "orange", size = 0.4, linetype = 2) +
-             annotate("text", lims.1 - 0.5 * 86400 , 7.6, label = "Rearing 30d mean min, 8.0 mg/L", hjust = 0, size = 2.4) +
-             annotate("text", lims.1 - 0.5 * 86400, 6.5, label = "Rearing 7d min mean, 6.5 mg/L", hjust = 0, size = 2.4) +
-             annotate("text", lims.1 + 86400 * 1, 6, label = "Rearing absolute min, 6.0 mg/L", hjust = 0, size = 2.4)
+             annotate("text", lims.1 - 0.5 * 86400 , 7.6, label = "Cold-water 30d mean min, 8.0 mg/L", hjust = 0, size = 2.4) +
+             annotate("text", lims.1 - 0.5 * 86400, 6.5, label = "Cold-water 7d min mean, 6.5 mg/L", hjust = 0, size = 2.4) +
+             annotate("text", lims.1 + 86400 * 1, 6, label = "Cold-water absolute min, 6.0 mg/L", hjust = 0, size = 2.4)
 # DO SATURATION PLOT   --------------------------------------------------------------------------------------
 dosat.R.plots <- ggplot(data = data.R, aes(x = DATE_TIME, y = DOSat, group = Station, color = Station)) +
              geom_point(size = 1, shape = 1) + ylab("DO (% Sat)") +
@@ -85,18 +85,18 @@ dosat.R.plots <- ggplot(data = data.R, aes(x = DATE_TIME, y = DOSat, group = Sta
                                 legend.position = "none", axis.title.y = element_text(size = 10, margin = margin(t = 0, r = a.marg, b = 0, l = 0)),
                                 axis.title.x = element_blank(), axis.text.x = element_blank()) +
              annotate("text", lims.1 + 86400 * 1, 86, color = "black",
-                      label = "Rearing Minimum, 90 percent", hjust = 0, size = 2.4) +
+                      label = "Cold-water Minimum, 90 percent", hjust = 0, size = 2.4) +
              geom_hline(yintercept = 90.0, color = "blue", size = 0.4, linetype = 2)
 # TEMPERATURE PLOT     --------------------------------------------------------------------------------------
 temp.R.plots <-  ggplot(data = data.R, aes(x = DATE_TIME, y = TempC, group = Station, color = Station)) +
-             geom_point(size = 1, shape = 1) + ylab("Temp (Â°C)") +
+             geom_point(size = 1, shape = 1) + ylab("Temp (°C)") +
              scale_x_datetime(limits = c(t.min, t.max), breaks=date_breaks("12 hours")) +
              scale_y_continuous(limits = c(10, 25), breaks = c(10, 15, 20, 25)) +
              theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor=element_blank(), 
                                 legend.position = "none", axis.title.y = element_text(size = 10, margin = margin(t = 0, r = b.marg, b = 0, l = 0)),
                                 axis.title.x = element_blank(), axis.text.x = element_blank()) +
              annotate("text", lims.1 + 86400 * 1, 15, color = "black",
-                      label = "Rearing 7DAD Maximum, 16Â°C", hjust = 0, size = 2.4) +
+                      label = "Cold-water 7DAD Maximum, 16°C", hjust = 0, size = 2.4) +
              geom_hline(yintercept = 16, color = "blue", size = 0.4, linetype = 2)
 # PH PLOT              --------------------------------------------------------------------------------------
 pH.R.plots <-  ggplot(data = data.R, aes(x = DATE_TIME, y = pH, group = Station, color = Station)) +
@@ -108,7 +108,7 @@ pH.R.plots <-  ggplot(data = data.R, aes(x = DATE_TIME, y = pH, group = Station,
                                 axis.title.x = element_blank(), axis.text.x = element_blank())
 # CONDUCTIVITY PLOT    --------------------------------------------------------------------------------------
 cond.R.plots <-  ggplot(data = data.R, aes(x = DATE_TIME, y = SpCon, group = Station, color = Station)) +
-             geom_point(size = 1, shape = 1) + ylab("Cond (ÂµS/cm)") +
+             geom_point(size = 1, shape = 1) + ylab("Cond (µS/cm)") +
              scale_x_datetime(limits = c(t.min, t.max), breaks=date_breaks("12 hours")) +
              scale_y_continuous(limits = c(40, 80), breaks = c(40, 50, 60, 70, 80)) +
              theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor=element_blank(),
@@ -188,14 +188,14 @@ dosat.S.plots <- ggplot(data = data.S, aes(x = DATE_TIME, y = DOSat, group = Sta
     geom_hline(yintercept = 95.0, color = "blue", size = 0.4, linetype = 2)
 # TEMPERATURE PLOT     --------------------------------------------------------------------------------------
 temp.S.plots <-  ggplot(data = data.S, aes(x = DATE_TIME, y = TempC, group = Station, color = Station)) +
-    geom_point(size = 1, shape = 1) + ylab("Temp (Â°C)") +
+    geom_point(size = 1, shape = 1) + ylab("Temp (°C)") +
     scale_x_datetime(limits = c(t.min, t.max), breaks=date_breaks("12 hours")) +
     scale_y_continuous(limits = c(10, 25), breaks = c(10, 15, 20, 25)) +
     theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor=element_blank(),
                        legend.position = "none", axis.title.y = element_blank(), axis.text.y = element_blank(),
                        axis.ticks.y = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank()) +
     annotate("text", lims.1 + 86400 * 1, 12, color = "black",
-             label = "Spawning 7DAD Maximum, 13Â°C", hjust = 0, size = 2.4) +
+             label = "Spawning 7DAD Maximum, 13°C", hjust = 0, size = 2.4) +
     geom_hline(yintercept = 13, color = "blue", size = 0.4, linetype = 2)
 # PH PLOT              --------------------------------------------------------------------------------------
 pH.S.plots <-  ggplot(data = data.S, aes(x = DATE_TIME, y = pH, group = Station, color = Station)) +
@@ -207,7 +207,7 @@ pH.S.plots <-  ggplot(data = data.S, aes(x = DATE_TIME, y = pH, group = Station,
                        axis.ticks.y = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank())
 # CONDUCTIVITY PLOT    --------------------------------------------------------------------------------------
 cond.S.plots <-  ggplot(data = data.S, aes(x = DATE_TIME, y = SpCon, group = Station, color = Station)) +
-    geom_point(size = 1, shape = 1) + ylab("Cond (ÂµS/cm)") +
+    geom_point(size = 1, shape = 1) + ylab("Cond (µS/cm)") +
     scale_x_datetime(limits = c(t.min, t.max), breaks=date_breaks("12 hours")) +
     scale_y_continuous(limits = c(40, 80), breaks = c(40, 50, 60, 70, 80)) +
     theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor=element_blank(),
@@ -225,9 +225,7 @@ turb.S.plots <-  ggplot(data = data.S, aes(x = DATE_TIME, y = Turb, group = Stat
                        legend.title = element_blank(), axis.title.x = element_blank(),
                        axis.text.x = element_text(size = 8, angle = 45, hjust = 1))
 
-#__________________________________________________________________
-# THIS SECTION ARRANGES THE PLOTS AND OUTPUTS TO FILE
-#__________________________________________________________________
+# THIS SECTION ARRANGES THE PLOTS AND OUTPUTS TO FILE -------------
 
 x <- grid.arrange(doconc.R.plots, doconc.S.plots,  
                   dosat.R.plots, dosat.S.plots,
@@ -239,4 +237,4 @@ x <- grid.arrange(doconc.R.plots, doconc.S.plots,
                   widths = c(4.17, 3.83),
                   ncol = 2)
 
-ggsave(filename = "Fig03_deq_cont_data_all.jpg", plot = x, path = paste0(dir, sub.dir3),width = 9, height = 8, units = "in", dpi = 300)
+ggsave(filename = "Fig03_deq_cont_data_all.png", plot = x, path = paste0(dir, sub.dir3),width = 9, height = 8, units = "in", dpi = 300)

@@ -77,11 +77,11 @@ for (i in 1 : length(ind))
                   geom_segment(aes(x = dat.R.beg, y = 6.5, xend = dat.R.end, yend = 6.5), color = "green", size = 0.4, linetype = 2) +
                   geom_segment(aes(x = dat.R.beg, y = 6, xend = dat.R.end, yend = 6), color = "orange", size = 0.4, linetype = 2) +
                   geom_segment(aes(x = dat.S.beg, y = 11, xend = dat.S.end, yend = 11), color = "red", size = 0.4, linetype = 2) +
-                  annotate("text", dat.S.end, 9.65, color = "black", label = "Spawning\n11.0 mg/L", hjust = 1, size = 1.75) +
+                  annotate("text", dat.S.end, 12, color = "black", label = "Spawning\n11.0 mg/L", hjust = 1, size = 1.75) +
                   annotate("rect", xmin = dat.R.end + mf * .5, xmax = dat.R.end + mf * 24, ymin = 7.65, ymax = 8.35, fill = "white", alpha = 1) +
-                  annotate("text", dat.R.end + mf * 1, 8.1, color = "black", label = "Rearing 30d mean min, 8.0 mg/L", hjust = 0, size = 1.75) +
-                  annotate("text", dat.R.end + mf * 1, 6.65, color = "black", label = "Rearing 7d min mean, 6.5 mg/L", hjust = 0, size = 1.75) +
-                  annotate("text", dat.R.end + mf * 1, 5.9, color = "black", label = "Rearing abs min, 6.0 mg/L", hjust = 0, size = 1.75) +
+                  annotate("text", dat.R.end + mf * 1, 8.1, color = "black", label = "Cold-water 30d mean min, 8.0 mg/L", hjust = 0, size = 1.75) +
+                  annotate("text", dat.R.end + mf * 1, 6.65, color = "black", label = "Cold-water 7d min mean, 6.5 mg/L", hjust = 0, size = 1.75) +
+                  annotate("text", dat.R.end + mf * 1, 5.9, color = "black", label = "Cold-water abs min, 6.0 mg/L", hjust = 0, size = 1.75) +
                   annotate("text", dat.R.beg, 13.5, color = "black", label = grph.lbl[ind[i]], hjust = 0, size = 2)
       grid.plots[[ind[i]]] <- doconc.plot
 }
@@ -106,11 +106,11 @@ for (i in 1 : length(ind))
           geom_segment(aes(x = dat.R.beg, y = 6.5, xend = dat.R.end, yend = 6.5), color = "green", size = 0.4, linetype = 2) +
           geom_segment(aes(x = dat.R.beg, y = 6, xend = dat.R.end, yend = 6), color = "orange", size = 0.4, linetype = 2) +
           geom_segment(aes(x = dat.S.beg, y = 11, xend = dat.S.end, yend = 11), color = "red", size = 0.4, linetype = 2) +
-          annotate("text", dat.S.end, 9.65, color = "black", label = "Spawning\n11.0 mg/L", hjust = 1, size = 1.75) +
+          annotate("text", dat.S.end, 12, color = "black", label = "Spawning\n11.0 mg/L", hjust = 1, size = 1.75) +
           annotate("rect", xmin = dat.R.end + mf * .5, xmax = dat.R.end + mf * 24, ymin = 7.65, ymax = 8.35, fill = "white", alpha = 1) +
-          annotate("text", dat.R.end + mf * 1, 8.1, color = "black", label = "Rearing 30d mean min, 8.0 mg/L", hjust = 0, size = 1.75) +
-          annotate("text", dat.R.end + mf * 1, 6.65, color = "black", label = "Rearing 7d min mean, 6.5 mg/L", hjust = 0, size = 1.75) +
-          annotate("text", dat.R.end + mf * 1, 5.9, color = "black", label = "Rearing abs min, 6.0 mg/L", hjust = 0, size = 1.75) +
+          annotate("text", dat.R.end + mf * 1, 8.1, color = "black", label = "Cold-water 30d mean min, 8.0 mg/L", hjust = 0, size = 1.75) +
+          annotate("text", dat.R.end + mf * 1, 6.65, color = "black", label = "Cold-water 7d min mean, 6.5 mg/L", hjust = 0, size = 1.75) +
+          annotate("text", dat.R.end + mf * 1, 5.9, color = "black", label = "Cold-water abs min, 6.0 mg/L", hjust = 0, size = 1.75) +
           annotate("text", dat.R.beg, 13.5, color = "black", label = grph.lbl[ind[i]], hjust = 0, size = 2)
       grid.plots[[ind[i]]] <- doconc.plot
 }
