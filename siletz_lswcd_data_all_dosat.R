@@ -23,7 +23,7 @@ library(lattice)
 
 dir <- "\\\\deqhq1\\tmdl\\TMDL_WR\\MidCoast\\Models\\Dissolved Oxygen\\Middle_Siletz_River_1710020405"
 dir.sub1 <- "\\001_data\\wq_data\\Monitoring 2017\\LSWCD\\Lincoln_SWCD_SILETZ RIVER_06292017-01052018\\"
-dir.sub2 <- "\\005_reporting\\figures"
+dir.sub2 <- "\\005_reporting\\figures\\analysis_memo"
 
 data.all <- read.csv(paste0(dir, dir.sub1, "siletz_volmon_cont_data.csv"))
 data.all$DATE.TIME <- as.POSIXct(data.all$DATE.TIME, "%m/%d/%Y %H:%M", tz = "America/Los_Angeles")
@@ -73,43 +73,61 @@ for (i in 1 : length(ind))
     grid.plots[[ind[i]]] <- ggplot(tmp) + geom_point(aes(x = a, y = b), size = .25, shape = 1) +
           xlab("Date") + ylab("DO (% Sat)") +
           scale_y_continuous(limits = c(60, 150), breaks = c(60, 90, 120, 150)) +
-          scale_x_datetime(limits = lims.t, breaks=date_breaks("1 months"), labels=date_format("%m/%d")) +
+          scale_x_datetime(limits = lims.t, breaks=date_breaks("1 months"),
+                           labels=date_format("%m/%d")) +
           theme_bw() + theme(panel.grid.minor=element_blank(),
                              axis.title.x = element_blank(),
-                             axis.text.x = element_text(size = 6), 
-                             axis.title.y = element_text(size = 6),
-                             axis.text.y = element_text(size = 6)) +
-          geom_segment(aes(x = dat.R.beg, y = 90, xend = dat.R.end, yend = 90), color = "blue", size = 0.4, linetype = 2) + 
-          geom_segment(aes(x = dat.S.beg, y = 95, xend = dat.S.end, yend = 95), color = "red", size = 0.4, linetype = 2) +
-          annotate("text", dat.S.end, 87, color = "black", label = "Spawning,\n95 percent", hjust = 1, size = 1.75) +
-          annotate("rect", xmin = dat.R.beg + mf * 0.5, xmax = dat.R.beg + mf * 26, ymin = 83, ymax = 86, fill = "white", alpha = 1) +
-          annotate("text", dat.R.beg + mf * 1, 85, color = "black", label = "Cold-water, 90 percent", hjust = 0, size = 1.75) +
-          annotate("text", dat.R.beg, 135, color = "black", label = grph.lbl[ind[i]], hjust = 0, size = 2)
+                             axis.text.x = element_text(size = 8), 
+                             axis.title.y = element_text(size = 8),
+                             axis.text.y = element_text(size = 8)) +
+          geom_segment(aes(x = dat.R.beg, y = 90, xend = dat.R.end, yend = 90),
+                       color = "blue", size = 0.4, linetype = 2) + 
+          geom_segment(aes(x = dat.S.beg, y = 95, xend = dat.S.end, yend = 95),
+                       color = "red", size = 0.4, linetype = 2) +
+          annotate("text", dat.S.end, 87, color = "black",
+                   label = "Spawning,\n95 percent", hjust = 1, size = 2.25) +
+          annotate("rect", xmin = dat.R.beg + mf * 0.5, xmax = dat.R.beg + mf * 26,
+                   ymin = 83, ymax = 86, fill = "white", alpha = 1) +
+          annotate("text", dat.R.beg + mf * 1, 87, color = "black",
+                   label = "Cold-water\n90 percent", hjust = 0, vjust = 1, size = 2.25) +
+          annotate("text", dat.R.beg, 145, color = "black", 
+                   label = grph.lbl[ind[i]], hjust = 0, size = 2.25)
 }
 
 # These plots are for the remainder of the graphs and only include the x labels
 ind = c(2, 3, 5, 6, 8, 9, 11, 13)
 for (i in 1 : length(ind))
 {
+
     col.sel <- c("DATE", STAID[ind[i]])
     tmp <- dos.by.sta[col.sel]
     names(tmp) <- c("a", "b")  
     grid.plots[[ind[i]]] <- ggplot(tmp) + geom_point(aes(x = a, y = b), size = .25, shape = 1) +
           scale_y_continuous(limits = c(60, 150), breaks = c(60, 90, 120, 150)) +
-          scale_x_datetime(limits = c(dat.R.beg, dat.S.end), breaks=date_breaks("1 months"), labels=date_format("%m/%d")) +
+          scale_x_datetime(limits = c(dat.R.beg, dat.S.end),
+                           breaks=date_breaks("1 months"),
+                           labels=date_format("%m/%d")) +
           theme_bw() + theme(panel.grid.minor = element_blank(),
                              axis.title.x = element_blank(),
-                             axis.text.x = element_text(size = 6),
+                             axis.text.x = element_text(size = 8),
                              axis.title.y = element_blank(), 
                              axis.text.y = element_blank(),
                              axis.ticks.y = element_blank()) +
-          geom_segment(aes(x = dat.R.beg, y = 90, xend = dat.R.end, yend = 90), color = "blue", size = 0.4, linetype = 2) + 
-          geom_segment(aes(x = dat.S.beg, y = 95, xend = dat.S.end, yend = 95), color = "red", size = 0.4, linetype = 2) +
-          annotate("text", dat.S.end, 87, color = "black", label = "Spawning,\n95 percent", hjust = 1, size = 1.75) +
-          annotate("rect", xmin = dat.R.beg + mf * 0.5, xmax = dat.R.beg + mf * 26, ymin = 83, ymax = 86, fill = "white", alpha = 1) +
-          annotate("text", dat.R.beg + mf * 1, 85, color = "black", label = "Cold-water, 90 percent", hjust = 0, size = 1.75) +
-          annotate("text", dat.R.beg, 135, color = "black", label = grph.lbl[ind[i]], hjust = 0, size = 2)
+          geom_segment(aes(x = dat.R.beg, y = 90, xend = dat.R.end, yend = 90),
+                       color = "blue", size = 0.4, linetype = 2) + 
+          geom_segment(aes(x = dat.S.beg, y = 95, xend = dat.S.end, yend = 95),
+                       color = "red", size = 0.4, linetype = 2) +
+          annotate("text", dat.S.end, 87, color = "black",
+                   label = "Spawning,\n95 percent", hjust = 1, size = 2.25) +
+          annotate("rect", xmin = dat.R.beg + mf * 0.5, xmax = dat.R.beg + mf * 26,
+                   ymin = 83, ymax = 86, fill = "white", alpha = 1) +
+          annotate("text", dat.R.beg + mf * 1, 87, color = "black",
+                   label = "Cold-water\n90 percent", hjust = 0, vjust = 1, size = 2.25) +
+          annotate("text", dat.R.beg, 145, color = "black",
+                   label = grph.lbl[ind[i]], hjust = 0, size = 2.25)
+
 }
+
 
 for (i in 14 : 15)
 {
@@ -123,7 +141,8 @@ x <- grid.arrange(grid.plots[[1]], grid.plots[[2]], grid.plots[[3]],
                   grid.plots[[12]], grid.plots[[13]], grid.plots[[15]],
                   ncol = 3, nrow = 5, widths = c(2.7, 2.4, 2.4))
 
-ggsave(filename = "fig07_lswcd_do_sat_all.png", plot = x, path = save.dir, width = 7.5, height = 9, units = "in", dpi = 300)
+ggsave(filename = "fig07_lswcd_do_sat_all.png", plot = x, path = save.dir, width = 7.5,
+       height = 9, units = "in", dpi = 300)
 
 
 

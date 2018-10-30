@@ -31,7 +31,7 @@ temp.7d.mx <- temp.day.mx
 dat.R.beg <- min(temp.day.mx$DATE) # Rearing start date
 dat.R.end <- as.Date("2017-08-30", tz = "America/Los_Angeles") # Rearing end date
 dat.S.beg <- as.Date("2017-09-07", tz = "America/Los_Angeles") # Spawn start date
-dat.S.end <- max(temp.day.mx$DATE) # Spawn end date
+dat.S.end <- as.Date("2017-10-30", tz = "America/Los_Angeles") # Spawn end date
 ind.R.end <- which(temp.day.mx$DATE == dat.R.end)
 ind.S.beg <- ind.R.end + 1
 ind.S.end <- which(temp.day.mx$DATE == dat.S.end)
@@ -83,24 +83,29 @@ for (i in 1:length(sites.old)) {
   temp.7d.mx.gr$Station <- gsub(sites.old[i], sites.new[i], temp.7d.mx.gr$Station)
 }
 # These are added to include a hard return for the legend entries
-temp.7d.mx.gr$Station <- gsub("_zz_", "\n", temp.7d.mx.gr$Station)
+temp.7d.mx.gr$Station <- gsub("_zz_", " ", temp.7d.mx.gr$Station)
 sta.order <- c(12, 13, 3, 6, 1, 5, 8, 9, 2, 4, 7, 11, 10)
 temp.7d.mx.gr$Station <- factor(temp.7d.mx.gr$Station, levels(factor(temp.7d.mx.gr$Station))[sta.order])
 
 #----------PLOT DATA----------
 #-------------------------------------------------------------------------------
 # Spawning criterion, 7-day mean minimum concentrations
-save.dir <- paste0(data.dir, "005_reporting\\figures")
-temp.7d.mx.plot <- ggplot() + geom_line(data = temp.7d.mx.gr, aes(x = DATE, y = value, group = Station, color = Station), size = 1) +
-                  scale_color_hue(h = c(0, 180), l = 85, c = 75) +
-                  xlab("Date") + ylab("Temperature (°C)") +
-                  scale_x_date(date_breaks = "1 month", date_labels = "%m/%d", limits = c(dat.R.beg, dat.S.end)) +
-                  scale_y_continuous(limits = c(0, 30), breaks = c(0, 10, 20, 30)) +
-                  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor=element_blank()) +
-                  geom_segment(aes(x = dat.R.beg, y = 16, xend = dat.R.end + 1, yend = 16), color = "black", size = 0.5) +
-                  geom_segment(aes(x = dat.R.end + 1, y = 13, xend = dat.S.end, yend = 13), color = "black", size = 0.5) +
-                  annotate("text", dat.R.beg, 15.3, color = "black", label = "Cold-water Maximum, 16°C", hjust = 0, size = 3) +
-                  annotate("text", dat.S.end - 45, 12, color = "black", label = "Spawning\nMaximum, 13.0°C", hjust = 0, size = 3) +
-                  theme(plot.title = element_text(size = 12, hjust = 0.5), legend.text=element_text(size=8), legend.key.size = unit(2, 'lines'))
+save.dir <- paste0(data.dir, "005_reporting\\figures\\analysis_memo")
+temp.7d.mx.plot <- ggplot(data = temp.7d.mx.gr, aes(x = DATE, y = value)) + geom_line() +
+    xlab("Date") + ylab("Temperature (°C)") +
+    scale_x_date(date_breaks = "1 month", date_labels = "%m/%d", limits = c(dat.R.beg, dat.S.end)) +
+    scale_y_continuous(limits = c(0, 30), breaks = c(0, 10, 20, 30)) +
+    theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor=element_blank()) +
+    geom_segment(aes(x = dat.R.beg, y = 16, xend = dat.R.end + 1, yend = 16),
+                 color = "blue", size = 0.5, linetype = 2) +
+    geom_segment(aes(x = dat.R.end + 1, y = 13, xend = dat.S.end, yend = 13),
+                 color = "blue", size = 0.5, linetype = 2) +
+    annotate("text", dat.R.beg, 14, color = "black",label = "Cold-water, 16°C",
+             hjust = 0, size = 3) +
+    annotate("text", dat.S.end - 60, 11, color = "black", label = "Spawning, 13.0°C",
+             hjust = 0, size = 3) +
+    theme(plot.title = element_text(size = 10, hjust = 0.5)) + 
+    facet_wrap(~Station, ncol = 3)
 
-ggsave(filename = "fig21_lswcd_temp_7dadm_all.png", plot = temp.7d.mx.plot, path = save.dir, width = 8, height = 6, units = "in", dpi = 300)
+ggsave(filename = "fig21_lswcd_temp_7dadm_all_v2.png", plot = temp.7d.mx.plot, path = save.dir,
+       width = 7.5, height = 9, units = "in", dpi = 300)

@@ -73,15 +73,15 @@ for (i in 1 : length(ind))
           scale_x_datetime(limits = lims.t, breaks=date_breaks("1 months"), labels=date_format("%m/%d")) +
           theme_bw() + theme(panel.grid.minor=element_blank(),
                              axis.title.x = element_blank(),
-                             axis.text.x = element_text(size = 6), 
-                             axis.title.y = element_text(size = 6),
-                             axis.text.y = element_text(size = 6)) +
+                             axis.text.x = element_text(size = 8), 
+                             axis.title.y = element_text(size = 8),
+                             axis.text.y = element_text(size = 8)) +
           geom_segment(aes(x = dat.R.beg, y = 16, xend = dat.R.end, yend = 16), color = "blue", size = 0.4, linetype = 2) + 
           geom_segment(aes(x = dat.S.beg, y = 13, xend = dat.S.end, yend = 13), color = "red", size = 0.4, linetype = 2) +
-          annotate("text", dat.S.end, 11.5, color = "black", label = "Spawning, 13°C", hjust = 1, size = 1.75) +
+          annotate("text", dat.S.end, 11.5, color = "black", label = "Spawning, 13°C", hjust = 1, size = 2.25) +
           annotate("rect", xmin = dat.R.beg + mf * 0.5, xmax = dat.R.beg + mf * 26, ymin = 86, ymax = 89, fill = "white", alpha = 1) +
-          annotate("text", dat.R.beg + mf * 1, 14.5, color = "black", label = "Cold-water, 16°C", hjust = 0, size = 1.75) +
-          annotate("text", dat.R.beg, 3, color = "black", label = grph.lbl[ind[i]], hjust = 0, size = 2)
+          annotate("text", dat.R.beg + mf * 1, 14.5, color = "black", label = "Cold-water, 16°C", hjust = 0, size = 2.25) +
+          annotate("text", dat.R.beg, 3, color = "black", label = grph.lbl[ind[i]], hjust = 0, size = 2.25)
 }
 
 # These plots are for the remainder of the graphs and only include the x labels
@@ -96,16 +96,16 @@ for (i in 1 : length(ind))
           scale_x_datetime(limits = lims.t, breaks=date_breaks("1 months"), labels=date_format("%m/%d")) +
           theme_bw() + theme(panel.grid.minor=element_blank(),
                              axis.title.x = element_blank(),
-                             axis.text.x = element_text(size = 6),
+                             axis.text.x = element_text(size = 8),
                              axis.title.y = element_blank(), 
                              axis.text.y = element_blank(),
                              axis.ticks.y = element_blank()) +
           geom_segment(aes(x = dat.R.beg, y = 16, xend = dat.R.end, yend = 16), color = "blue", size = 0.4, linetype = 2) + 
           geom_segment(aes(x = dat.S.beg, y = 13, xend = dat.S.end, yend = 13), color = "red", size = 0.4, linetype = 2) +
-          annotate("text", dat.S.end, 11.5, color = "black", label = "Spawning, 13°C", hjust = 1, size = 1.75) +
+          annotate("text", dat.S.end, 11.5, color = "black", label = "Spawning, 13°C", hjust = 1, size = 2.25) +
           annotate("rect", xmin = dat.R.beg + mf * 0.5, xmax = dat.R.beg + mf * 26, ymin = 86, ymax = 89, fill = "white", alpha = 1) +
-          annotate("text", dat.R.beg + mf * 1, 14.5, color = "black", label = "Cold-water, 16°C", hjust = 0, size = 1.75) +
-          annotate("text", dat.R.beg, 3, color = "black", label = grph.lbl[ind[i]], hjust = 0, size = 2)
+          annotate("text", dat.R.beg + mf * 1, 14.5, color = "black", label = "Cold-water, 16°C", hjust = 0, size = 2.25) +
+          annotate("text", dat.R.beg, 3, color = "black", label = grph.lbl[ind[i]], hjust = 0, size = 2.25)
 }
 
 for (i in 14 : 15)
