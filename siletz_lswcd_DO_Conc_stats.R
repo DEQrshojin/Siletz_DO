@@ -26,6 +26,8 @@ dataTmp$DATE.TIME <- as.POSIXct(dataTmp$DATE.TIME,
 
 staid <- unique(dataTmp$STAID) # create a list of stations
 
+staid <- staid[-1] # remove Strome Park 38941
+
 dataTmp <- dataTmp[complete.cases(dataTmp[, 4:7]), ] # Remove NA
 
 dataTmp$DATE <- as.Date(dataTmp$DATE.TIME, tz = "America/Los_Angeles") # Create dates columns
@@ -48,7 +50,7 @@ doDayMi <- dcast(dataTmp, dataTmp$DATE ~ dataTmp$STAID, fun = min, value.var = "
 
 for (z in 1:ncol(doDayMi)){doDayMi[ , z][is.infinite(doDayMi[ , z])] = NA}
 
-col.order <- c(1, 13, 14, 4, 7, 2, 6, 9, 10, 3, 5, 8, 12, 11) # Initial ordering in alphabetical
+col.order <- c(1, 14, 4, 7, 2, 6, 9, 10, 3, 5, 8, 12, 11) # Initial ordering in alphabetical
 
 doDayMn <- doDayMn[col.order] #Reorder sites from alphabetical to D/S -> U/S
 
@@ -67,10 +69,6 @@ doStats = list(doDayMi, doDayMi, doDayMi, doDayMi)
 statNames = c("CW30D", "CW7D", "CWAbs", "SP7D")
 
 names(doStats) = statNames
-
-# do.7d.mn <- do.day.mn
-# do.7d.mi <- do.day.mn
-# do.30d.mn <- do.day.mn
 
 # Rear/spawn period dates
 
@@ -207,19 +205,27 @@ sitesOld <- unique(doStatGG[["CW30D"]]$Station) # Rename the values in the Stati
 
 dataSite1 <- read.csv(paste0(dataDir, dirSub1, "sites_order_z.csv"))
 
+dataSite1 = dataSite1[-1, ]
+
 sitesNew1 <- dataSite1$FULL_NAME
 
-staOrder <- c(12, 13, 3, 6, 1, 5, 8, 9, 2, 4, 7, 11, 10) # New column order
+staOrder <- c(12, 3, 6, 2, 5, 8, 9, 1, 4, 7, 11, 10) # New column order
 
 for (i in 1 : length(sitesOld))
 {
 
-    for (stat in statNames)
+    for (stat in statNames) # Iterate through each list of stats and rename and reorder
     {
+        
+        # Change out the station names for each site
         
         doStatGG[[stat]]$Station = gsub(sitesOld[i], sitesNew1[i], doStatGG[[stat]]$Station)
         
+        # Substitute the _zz_ with a space (legacy code--used to a hard return)
+        
         doStatGG[[stat]]$Station <- gsub("_zz_", " ", doStatGG[[stat]]$Station)
+        
+        # Factorize the stations, then reorder
         
         doStatGG[[stat]]$Station <- factor(doStatGG[[stat]]$Station,
                                            levels(factor(doStatGG[[stat]]$Station))[staOrder])

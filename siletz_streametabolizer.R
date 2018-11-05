@@ -15,32 +15,50 @@ library(ggplot2)
 
 # INTRO SCRIPT MODIFY AND USE, ONLY NECESSARY FOR BAYES MODEL ----
 dir.out <- "\\\\deqhq1\\tmdl\\TMDL_WR\\MidCoast\\Models\\Dissolved Oxygen\\Middle_Siletz_River_1710020405\\001_data\\metabolism\\"
+
 dir.out2 <- "\\\\deqhq1\\tmdl\\TMDL_WR\\MidCoast\\Models\\Dissolved Oxygen\\Middle_Siletz_River_1710020405\\001_data\\metabolism"
-x <- readRDS(paste0(dir.out, "data.DO.metab.NAreplce.RData")) # This data set is the modified data frame with NA values (C, D or no data)
-                                                              # And includes the PAR data
+
+# Read in data. These data include gap filled t_i in order to satisfy the requirements of
+# Stream metabolizer. DQL of C or D were removed, then filled with interpolated values from 
+# adjecent data. The data also include PAR calculated outside of streamMetabolizer, using
+# Clear-sky solar and a conversion factor. Within this script, the data for the Toledo Intake,
+# STAID 37848 need to be removed because they were of DQL C. 
+x <- readRDS(paste0(dir.out, "data.DO.metab.NAreplce.RData"))
+
 # interpolated from surrounding values.
+
 STAID <- unique(x$STAID)
+
 STA <- as.character(STAID)
-# log.out <- paste0(dir.out, "log.out") # Log file to write to (Only use for Bayesian model)
-t_brk = as.POSIXct("9/1/2017 00:00", "%m/%d/%Y %H:%M", tz = "America/Los_Angeles") # Break for Cold-water (CW) and Spawning (SP) periods
-# Set up variables
+
+# Break for Cold-water (CW) and Spawning (SP) periods
+
+t_brk = as.POSIXct("9/1/2017 00:00",
+                   "%m/%d/%Y %H:%M",
+                   tz = "America/Los_Angeles") 
+
+# Declare variables
+
 perc.comp = 0
+
 ts = nrow(x)
+
 metab.output.all <- list(list(), list())
+
 plts_CW <- list()
+
 plts_SP <- list()
 
 # metab.all <- NULL
 # met_CW <- list()
 # met_SP <- list()
 
-# Start of counter to report progress 
-time.stamp <- as.POSIXct(Sys.time(), "%Y-%m-%d %H:%M:%S", tz = "America/Los_Angles")
-print(paste0("Model started at ", time.stamp))
-# cat(paste0("Model started at ", time.stamp, "\n"), file = log.out, append = FALSE)
-sta.ord <- c("I", "E", "C", "J", "F", "D", "K", "G", "H", "M", "L", "A", "B") # Order for plotting Downstream => Upstream
+# Order for plotting Downstream => Upstream
 
-# RUN METABOLIZER FOR GPP, ER, AND REAERATION USING MAXIMUM LIKELIHOOD ESTIMATION. DON'T NEED TO RUN -- LOAD DATA FROM: ----
+sta.ord <- c("I", "E", "C", "J", "F", "D", "K", "G", "H", "M", "L", "A", "B") 
+
+# RUN METABOLIZER FOR GPP, ER, AND REAERATION USING MAXIMUM LIKELIHOOD ESTIMATION.
+# DON'T NEED TO RUN -- LOAD DATA FROM: ----
 # metab_data_all_MLE_dataframe.RData in dir.out (see below)
 for (i in 1 : length(STAID))
 {

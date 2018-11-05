@@ -13,13 +13,22 @@ library(lattice)
 
 # IMPORT DATA ----
 
-dir <- "\\\\deqhq1\\tmdl\\TMDL_WR\\MidCoast\\Models\\Dissolved Oxygen\\Middle_Siletz_River_1710020405\\001_data\\metabolism"
+dir <- "\\\\deqhq1\\tmdl\\TMDL_WR\\MidCoast\\Models\\Dissolved Oxygen\\Middle_Siletz_River_1710020405\\"
 
-sv.dir = "\\\\deqhq1\\tmdl\\TMDL_WR\\MidCoast\\Models\\Dissolved Oxygen\\Middle_Siletz_River_1710020405\\005_reporting\\figures\\analysis_memo"
+dir1 = "001_data\\metabolism"
 
-fil <- "Metab_Output_MLE_all_20180920.RData"
+svDir = "005_reporting\\figures\\analysis_memo"
 
-x <- readRDS(paste0(dir, "\\", fil)) # This loads the result of the stream metaboliser analysis
+fil <- "Metab_Output_MLE_all_wDepth.RData"
+
+# Load the result of the stream metaboliser analysis
+
+x <- readRDS(paste0(dir, dir1, "\\", fil)) 
+
+# The Cold-water period data for the Toldeo Intake STAID 37848 were included in the metabolism 
+# analysis but are removed here because they did not meet the quality control requirements.
+
+x[["Cold-water Period"]][["37848"]] = "No Data"
 
 Stations <- names(x[["Cold-water Period"]])
 
@@ -120,8 +129,7 @@ box.CW.GPP <- ggplot() + theme_bw() +
           axis.title.y = element_text(margin = margin(t = 0, r = 6, b = 0, l = 0))) +
     annotate("text", 2, 7, label = "GROSS PRIMARY\nPRODUCTION", hjust = 0, size = 4) +
     scale_y_continuous(limits = c(0, 8), breaks = c(0, 2, 4, 6, 8)) +
-    ylab(bquote("Mean Daily GPP (g " *~O[2] ~m^-2 ~day^-1*")")) +
-    ggtitle("COLD-WATER PERIOD STREAM METABOLISM")
+    ylab(bquote("Mean Daily GPP (g " *~O[2] ~m^-2 ~day^-1*")"))
 
 box.CW.ER <- ggplot() +
     geom_boxplot(data = subset(bxplt.CW.df, STAID != 38941),
@@ -131,10 +139,10 @@ box.CW.ER <- ggplot() +
     xlab("Station") + ylab(bquote("Mean Daily ER (g " *~O[2] ~m^-2 ~day^-1*")")) +
     annotate("text", 2, -7, label = "ECOSYSTEM\nRESPIRATION", hjust = 0, size = 4)
 
-CW.per <- grid.arrange(box.CW.GPP, box.CW.ER, nrow = 2, widths = 6.5, heights = c(3.25, 3.25))
+CW.per <- grid.arrange(box.CW.GPP, box.CW.ER, nrow = 2, widths = 6.5, heights = c(3, 3.25))
 
-ggsave(filename = "fig22_boxplt_coldwater_DO_Metab.png", plot = CW.per, path = sv.dir,
-       width = 6.5, height = 6.5, units = "in", dpi = 300)
+ggsave(filename = "fig22_boxplt_coldwater_DO_Metab_wDEPTH.png", plot = CW.per,
+       path = paste0(dir, svDir), width = 6.5, height = 6.5, units = "in", dpi = 300)
 
 # Spawning plots
 
@@ -145,20 +153,48 @@ box.SP.GPP <- ggplot() + theme_bw() +
     theme(axis.title.x = element_blank(), axis.text.x = element_blank(),
           plot.title = element_text(hjust = 0.5),
           axis.title.y = element_text(margin = margin(t = 0, r = 6, b = 0, l = 0))) +
-    annotate("text", 2.5, 3.5, label = "GROSS PRIMARY\nPRODUCTION", hjust = 0, size = 4) +
-    scale_y_continuous(limits = c(0, 4), breaks = c(0, 1, 2, 3, 4)) +
-    ylab(bquote("Mean Daily GPP (g " *~O[2] ~m^-2 ~day^-1*")")) +
-    ggtitle("SPAWNING PERIOD STREAM METABOLISM")
+    annotate("text", 2, 7, label = "GROSS PRIMARY\nPRODUCTION", hjust = 0, size = 4) +
+    scale_y_continuous(limits = c(0, 8), breaks = c(0, 2, 4, 6, 8)) +
+    ylab(bquote("Mean Daily GPP (g " *~O[2] ~m^-2 ~day^-1*")"))
 
 box.SP.ER <- ggplot() +
     geom_boxplot(data = subset(bxplt.SP.df, STAID != 38941),
                  aes(x = STAID, y = ER.daily, group = STAID), outlier.shape = 1, outlier.size = 1) +
     theme_bw() + theme(legend.position = "none", plot.title = element_blank()) +
-    scale_y_continuous(limits = c(-4, 0), breaks = c(-4, -3, -2, -1, 0)) +
+    scale_y_continuous(limits = c(-8, 0), breaks = c(-8, -6, -4, -2, 0)) +
     xlab("Station") + ylab(bquote("Mean Daily ER (g " *~O[2] ~m^-2 ~day^-1*")")) +
-    annotate("text", 2.5, -3.5, label = "ECOSYSTEM\nRESPIRATION", hjust = 0, size = 4)
+    annotate("text", 2, -7, label = "ECOSYSTEM\nRESPIRATION", hjust = 0, size = 4)
 
-SP.per <- grid.arrange(box.SP.GPP, box.SP.ER, nrow = 2, widths = 6.5, heights = c(3.25, 3.25))
+SP.per <- grid.arrange(box.SP.GPP, box.SP.ER, nrow = 2, widths = 6.5, heights = c(3, 3.25))
 
-ggsave(filename = "fig23_boxplt_spawning_DO_Metab.png", plot = SP.per, path = sv.dir,
-       width = 6.5, height = 6.5, units = "in", dpi = 300)
+ggsave(filename = "fig23_boxplt_spawning_DO_Metab_wDEPTH.png", plot = SP.per,
+       path = paste0(dir, svDir), width = 6.5, height = 6.5, units = "in", dpi = 300)
+
+# Reaeration rate plots 
+
+box.CW.k600 <- ggplot() + theme_bw() +
+    geom_boxplot(data = subset(bxplt.CW.df, STAID != 38941),
+                 aes(x = STAID, y = K600.daily, group = STAID),
+                 outlier.shape = 1, outlier.size = 1) + 
+    theme(axis.title.x = element_blank(), axis.text.x = element_blank(),
+          plot.title = element_text(hjust = 0.5),
+          axis.title.y = element_text(margin = margin(t = 0, r = 6, b = 0, l = 0))) +
+    annotate("text", 2, 18, label = "Cold-Water Reaeration\nRates", hjust = 0, size = 4) +
+    scale_y_continuous(limits = c(0, 20), breaks = c(0, 4, 8, 12, 16, 20)) +
+    ylab(bquote("Mean Daily " *~K[600]* ", " *~day^-1 *")"))
+
+box.SP.k600 <- ggplot() + theme_bw() +
+    geom_boxplot(data = subset(bxplt.SP.df, STAID != 38941),
+                 aes(x = STAID, y = K600.daily, group = STAID),
+                 outlier.shape = 1, outlier.size = 1) + 
+    theme(plot.title = element_text(hjust = 0.5),
+          axis.title.y = element_text(margin = margin(t = 0, r = 6, b = 0, l = 0))) +
+    annotate("text", 2, 18, label = "Spawning Reaeration\nRates", hjust = 0, size = 4) +
+    scale_y_continuous(limits = c(0, 20), breaks = c(0, 4, 8, 12, 16, 20)) +
+    ylab(bquote("Mean Daily " *~K[600]* ", " *~day^-1 *")")) +
+    xlab("Station")
+
+K600.per <- grid.arrange(box.CW.k600, box.SP.k600, nrow = 2, widths = 6.5, heights = c(3, 3.25))
+
+ggsave(filename = "fig27_boxplt_DO_metab_K600.png", plot = K600.per,
+       path = paste0(dir, svDir), width = 6.5, height = 6.5, units = "in", dpi = 300)
