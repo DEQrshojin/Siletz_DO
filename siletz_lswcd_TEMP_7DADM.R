@@ -63,7 +63,8 @@ ind.S.end <- nrow(temp.day.mx)
 
 # Create table of 7D mean-min and 7D min-mean of DO at 100 per cent sat 
 for (j in 1:length(STAID_vctr)) {
-  # Calculate rolling average of daily mean/min for Rearing Period; i refers to dates, j refers to stations
+  # Calculate rolling average of daily mean/min for Rearing Period;
+  # i refers to dates, j refers to stations
   for (i in 1:ind.R.end) {
     if (temp.day.mx[i, 1] < dat.R.beg + 7) {
       # START STATEMENT
@@ -138,7 +139,7 @@ temp.7d.mx.gr$Station <- factor(temp.7d.mx.gr$Station,
 save.dir <- paste0(data.dir, "005_reporting\\figures\\analysis_memo")
 
 temp.7d.mx.plot <- ggplot(data = temp.7d.mx.gr, aes(x = DATE, y = value)) + geom_line() +
-    xlab("Date") + ylab("Temperature (°C)") +
+    xlab("Date") + ylab("Temperature (?C)") +
     scale_x_date(date_breaks = "1 month", date_labels = "%m/%d", limits = c(dat.R.beg, dat.S.end)) +
     scale_y_continuous(limits = c(0, 30), breaks = c(0, 10, 20, 30)) +
     theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor=element_blank()) +
@@ -146,9 +147,9 @@ temp.7d.mx.plot <- ggplot(data = temp.7d.mx.gr, aes(x = DATE, y = value)) + geom
                  color = "blue", size = 0.5, linetype = 2) +
     geom_segment(aes(x = dat.R.end + 1, y = 13, xend = dat.S.end, yend = 13),
                  color = "blue", size = 0.5, linetype = 2) +
-    annotate("text", dat.R.beg, 14, color = "black",label = "Cold-water, 16°C",
+    annotate("text", dat.R.beg, 14, color = "black",label = "Cold-water, 16?C",
              hjust = 0, size = 3) +
-    annotate("text", dat.S.end - 60, 11, color = "black", label = "Spawning, 13.0°C",
+    annotate("text", dat.S.end - 60, 11, color = "black", label = "Spawning, 13.0?C",
              hjust = 0, size = 3) +
     theme(plot.title = element_text(size = 10, hjust = 0.5)) + 
     facet_wrap(~Station, ncol = 3)

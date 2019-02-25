@@ -79,8 +79,10 @@ for (i in 2 : length(STAID))
 
 data.wq <- rbind(data.wq, tmp2)
 
-detNotes = paste0("Solid points indicate values detected above the detection limit\n",
-                  "Hollow points indicate values not detected")
+detNotes = paste0("- Solid points indicate values detected above the detection limit\n",
+                  "Hollow points indicate values not detected\n",
+                  "- Values not detected above the detection limit are displayed as\n",
+                  "Half the detection limit.")
 
 # GRAPH DATA ----
 
@@ -197,7 +199,7 @@ for (i in 1 : 2)
               legend.key.size = unit(1.7, 'lines')) + 
         annotate("text", color = "black", label = detNotes, hjust = 0, size = 2.25)
     
-    v = text_grob(detNotes, just = c(0.5, 0), color = "black", face = "plain", size = 8)
+    v = text_grob(detNotes, just = c(0.5, 0.5), color = "black", face = "plain", size = 8)
 
     # Create layout matrix to include legend at the bottom
 
