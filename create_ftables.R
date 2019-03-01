@@ -8,7 +8,7 @@ library(ggplot2)
 library(stats)
 
 # CALIBRATION PARAMETERS PARAMETERS ----
-# THIS IS THE FTABLE PARAMETER SET!!!!__________________________________________
+# THIS IS THE FTABLE PARAMETER SET______________________________________________
 slpChn <- c(0.153, 0.153, 0.350) # Main channel side slope # For 
 
 slpChn <- c(rep(slpChn[1], 8), rep(slpChn[2], 2), rep(slpChn[3], 6))
@@ -21,7 +21,7 @@ nMod <- c(0.5, 0.4, 1.2)
 
 # Manning's n for floodplain areas
 floodplainN <- c(0.07, 0.07, 0.12)
-# THIS IS THE FTABLE PARAMETER SET!!!!__________________________________________
+# THIS IS THE FTABLE PARAMETER SET______________________________________________
 
 for (jj in 1) {
 
@@ -306,13 +306,21 @@ for (jj in 1) {
   ftables[129 : 136, 1] <- 'FTABLE 17'
   
   # Write to csv
-  file <- 'C:/siletz/inputs/ftab.csv'
+  # file <- 'C:/siletz/inputs/ftab.csv'
 
-  write.csv(ftables, file = file, row.names = FALSE)
+  # write.csv(ftables, file = file, row.names = FALSE)
 
   comb <- ftable_calibration(ftables)
   
-  View(comb)
-
+  # Mean velocity calculations
+  velQOut <- ftab[['mean']][, c(2, 5, 9)]
+  
+  velQOut$Vel <- velQOut$Q / velQOut$x # in m/s
+  
+  velQOut$Ord <- c(16, 15, 14, 13, 12, 11, 8, 7, 6, 3, 1, 2, 10, 9, 5, 4)
+  
+  write.csv(velQOut, file = 'D:/siletz_tmp/scratch/SLZ_shp/ftab_Q_V.csv',
+            row.names = FALSE)
+  
 }
 
