@@ -20,6 +20,8 @@ st.38918.q$instantaneous_flow_cfs <- as.numeric(st.38918.q$instantaneous_flow_cf
 st.38918.q <- st.38918.q[complete.cases(st.38918.q), ]
 
 # Calculate daily medians for plotting ----
+source('')
+
 medFlows <- daily_medians(st.38918.q) # Returns dF of (DOY, medFlow)
 
 # Read in DEQ measured flow measurements at Hee Hee Ilahee Park ----
@@ -163,8 +165,10 @@ Q.plot <- ggplot(data = q4plot, aes(x = date, y = q_cfs,
           ggtitle("USGS 14305500 - SILETZ RIVER AT SILETZ, OR") + 
           theme(plot.title = element_text(size = 12, hjust = 0.5))
 
-ggsave(filename = "Fig2_usgs_q.png", plot = Q.plot, path = dir, width = 10,
-       height = 8, units = "in", dpi = 300)
+presoPath <- '//deqhq1/tmdl/TMDL_WR/MidCoast/Models/Dissolved Oxygen/Middle_Siletz_River_1710020405/005_reporting/presentations/003_TWG_20190403/figures_maps'
+
+ggsave(filename = "Fig2_usgs_q.png", plot = Q.plot, path = presoPath, width = 12,
+       height = 9, units = "in", dpi = 300)
 
 # ----
 # PREVIOUS CODE -- URL NOT WORKING ON 12/26/2018 ----

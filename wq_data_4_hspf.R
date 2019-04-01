@@ -51,6 +51,6 @@ wqData$date <- as.Date(wqData$dt, '%Y-%m-%d %H:%M:%S',
 # Identify runoff component periods
 
 
-
+wqData <- wqData[which(wqData$dt >= pDates[1]), ]
 
 

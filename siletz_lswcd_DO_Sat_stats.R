@@ -158,7 +158,7 @@ dos.30d.mn.gr$Station <- factor(dos.30d.mn.gr$Station,
 
 #--------------------------------PLOT DATA--------------------------------------
 
-save.dir <- paste0(data.dir, "005_reporting\\figures\\analysis_memo")
+save.dir <- paste0(data.dir, "005_reporting\\presentations\\003_TWG_20190403\\figures_maps")
 
 # Cold-water criterion 1, 30-day mean minimum concentrations
 
@@ -172,10 +172,10 @@ doPlotCW <- ggplot(data = dos.30d.mn.gr, aes(x = DATE, y = value)) + geom_line()
     annotate("text", dat.R.end - 28, 88, color = "black", size = 3,
              label = "Cold-water Minimum, 90%", hjust = 0.25) +
     theme(plot.title = element_text(size = 10, hjust = 0.5)) + 
-    facet_wrap(~Station, ncol = 3)
+    facet_wrap(~Station, ncol = 4)
 
 ggsave(filename = "fig18_lswcd_dos_30dmn_rear_v2.png", plot = doPlotCW, path = save.dir,
-       width = 7.5, height = 9, units = "in", dpi = 300)
+       width = 12, height = 9, units = "in", dpi = 300)
 
 # Spawning criterion, 7-day mean minimum concentrations
 doPlotSP <- ggplot(data = dos.7d.mn.gr, aes(x = DATE, y = value)) + geom_line() +
@@ -188,8 +188,8 @@ doPlotSP <- ggplot(data = dos.7d.mn.gr, aes(x = DATE, y = value)) + geom_line() 
     annotate("text", dat.S.end -28, 93, color = "black",
              label = "Spawning Minimum, 95%", hjust = 0.2, size = 3) +
     theme(plot.title = element_text(size = 10, hjust = 0.5)) +
-    facet_wrap(~Station, ncol = 3)
+    facet_wrap(~Station, ncol = 4)
 
 ggsave(filename = "fig20_lswcd_dos_7dmn_spwn_v2.png", plot = doPlotSP, path = save.dir,
-       width = 7.5, height = 9, units = "in", dpi = 300)
+       width = 12, height = 9, units = "in", dpi = 300)
 

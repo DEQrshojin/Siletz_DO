@@ -70,9 +70,13 @@ x <- ggplot(data.all) + geom_point(aes(x = DATE.TIME, y = DO_Sat), size = 0.1, s
              label = "Spawning, 95%", hjust = 1, size = 2.5) +
     annotate("text", dat.R.beg + mf * 1, 87, color = "black",
              label = "Cold-water, 90%", hjust = 0, size = 2.5) +
-    facet_wrap(~Station, ncol = 3)
+    facet_wrap(~Station, ncol = 4)
 
-ggsave(filename = "fig07_lswcd_do_sat_all.png", plot = x, path = save.dir, width = 7.5,
+
+# Path for presentation figures
+p2 <- '//deqhq1/tmdl/TMDL_WR/MidCoast/Models/Dissolved Oxygen/Middle_Siletz_River_1710020405/005_reporting/presentations/003_TWG_20190403/figures_maps'
+
+ggsave(filename = "fig07_lswcd_do_sat_all.png", plot = x, path = p2, width = 12,
        height = 9, units = "in", dpi = 300)
 
 

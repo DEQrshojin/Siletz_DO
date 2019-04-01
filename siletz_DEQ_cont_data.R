@@ -302,4 +302,7 @@ x <- grid.arrange(doconc.R.plots, doconc.S.plots,
                   widths = c(4.17, 3.83),
                   ncol = 2)
 
-ggsave(filename = "Fig03_deq_cont_data_all_v2.png", plot = x, path = paste0(dir, sub.dir3),width = 9, height = 8, units = "in", dpi = 300)
+# Path for presentation figures
+p2 <- '//deqhq1/tmdl/TMDL_WR/MidCoast/Models/Dissolved Oxygen/Middle_Siletz_River_1710020405/005_reporting/presentations/003_TWG_20190403/figures_maps'
+
+ggsave(filename = "Fig03_deq_cont_data_all_v2.png", plot = x, path = p2, width = 12, height = 9, units = "in", dpi = 300)

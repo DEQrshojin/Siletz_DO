@@ -136,7 +136,7 @@ temp.7d.mx.gr$Station <- factor(temp.7d.mx.gr$Station,
 
 # Spawning criterion, 7-day mean minimum concentrations
 
-save.dir <- paste0(data.dir, "005_reporting\\figures\\analysis_memo")
+save.dir <- paste0(data.dir, "005_reporting\\presentations\\003_TWG_20190403\\figures_maps")
 
 temp.7d.mx.plot <- ggplot(data = temp.7d.mx.gr, aes(x = DATE, y = value)) + geom_line() +
     xlab("Date") + ylab("Temperature (?C)") +
@@ -152,7 +152,7 @@ temp.7d.mx.plot <- ggplot(data = temp.7d.mx.gr, aes(x = DATE, y = value)) + geom
     annotate("text", dat.S.end - 60, 11, color = "black", label = "Spawning, 13.0?C",
              hjust = 0, size = 3) +
     theme(plot.title = element_text(size = 10, hjust = 0.5)) + 
-    facet_wrap(~Station, ncol = 3)
+    facet_wrap(~Station, ncol = 4)
 
 ggsave(filename = "fig21_lswcd_temp_7dadm_all_v2.png", plot = temp.7d.mx.plot, path = save.dir,
-       width = 7.5, height = 9, units = "in", dpi = 300)
+       width = 12, height = 9, units = "in", dpi = 300)

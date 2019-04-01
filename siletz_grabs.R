@@ -222,7 +222,9 @@ for (i in 1 : 2)
                       widths = c(4.2, 3.8))
     # Print to file
 
+    p2 <- '//deqhq1/tmdl/TMDL_WR/MidCoast/Models/Dissolved Oxygen/Middle_Siletz_River_1710020405/005_reporting/presentations/003_TWG_20190403/figures_maps'
+    
     ggsave(filename = paste0("fig0", i + 3, "_wq_deq_grabs_set", i, "_v2.png"),
-           plot = x, path = paste0(dir, dir.sub2), width = 8, height = 9,
+           plot = x, path = p2, width = 12, height = 9,
            units = "in", dpi = 300)
 }

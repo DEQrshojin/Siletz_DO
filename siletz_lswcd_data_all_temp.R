@@ -72,10 +72,13 @@ x <- ggplot(data.all) + geom_point(aes(x = DATE.TIME, y = TEMP_C), size = 0.1, s
              hjust = 1, size = 2.5) +
     annotate("text", dat.R.beg + mf * 1, 14.5, color = "black", label = "Cold-water, 16°C",
              hjust = 0, size = 2.5) +
-    facet_wrap(~Station, ncol = 3)
+    facet_wrap(~Station, ncol = 4)
 
 
-ggsave(filename = "fig08_lswcd_temp_all.png", plot = x, path = save.dir, width = 7.5,
+# Path for presentation figures
+p2 <- '//deqhq1/tmdl/TMDL_WR/MidCoast/Models/Dissolved Oxygen/Middle_Siletz_River_1710020405/005_reporting/presentations/003_TWG_20190403/figures_maps'
+
+ggsave(filename = "fig08_lswcd_temp_all.png", plot = x, path = p2, width = 12,
        height = 9, units = "in", dpi = 300)
 
 

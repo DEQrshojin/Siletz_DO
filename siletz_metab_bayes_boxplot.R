@@ -10,20 +10,21 @@ library(grDevices)
 library(grid)
 library(gridExtra)
 library(lattice)
+library(streamMetabolizer)
 
 # IMPORT DATA ----
 
-# dir <- "\\\\deqhq1\\tmdl\\TMDL_WR\\MidCoast\\Models\\Dissolved Oxygen\\Middle_Siletz_River_1710020405\\"
-# 
-# dir1 = "001_data\\metabolism"
-# 
-# svDir = "005_reporting\\figures\\analysis_memo"
-# 
-# fil <- "Metab_Output_Bayes.RData"
-# 
-# x <- readRDS(paste0(dir, dir1, "\\", fil)) # This loads the result of the stream metaboliser analysis
+dir <- "\\\\deqhq1\\tmdl\\TMDL_WR\\MidCoast\\Models\\Dissolved Oxygen\\Middle_Siletz_River_1710020405\\"
 
-x = metab.output.all
+dir1 = "001_data\\metabolism"
+
+svDir = "005_reporting\\presentations\\003_TWG_20190403\\figures_maps"
+
+fil <- "Metab_Output_Bayes.RData"
+
+x <- readRDS(paste0(dir, dir1, "\\", fil)) # This loads the result of the stream metaboliser analysis
+
+# x = metab.output.all
 
 Stations <- names(x[["Cold-water Period"]])
 
@@ -33,7 +34,7 @@ date.break <- as.POSIXct("9/1/2017 00:00", "%m/%d/%Y %H:%M", tz = "America/Los_A
 
 # CREATE A DUMMY ROW WITH DATA THAT WON'T APPEAR ON THE GRAPH ----
 
-dummy <- x[["Cold-water Period"]][["11246"]]@fit[1, c(1 : 2, 5, 8, 14 : 16)]
+dummy <- x[["Cold-water Period"]][["11246"]]@fit[['daily']][1, c(1, 3, 6, 9, 11 : 13)]
 
 dummy$STAID <- STAID[1]
 
@@ -47,17 +48,16 @@ dummy[1, 1] <- date.break
 
 dummy[1, 2 : 4] <- c(-99, 99, 99)
 
-dummy[1, 5 : 8] <- "No Data"
+dummy[1, 5 : 7] <- "No Data"
 
 # PULL OUT DATA FROM LIST AND ORGANIZE INTO DF FOR PLOTTING ----
-for (i in 1 : length(STAID))
-{
-    # Cold-water
+for (i in 1 : length(STAID)) {
 
+    # Cold-water
     if(class(x[["Cold-water Period"]][[i]]) == 'metab_mle')
     {
 
-        xsub <- x[["Cold-water Period"]][[i]]@fit[ , c(1 : 2, 5, 8, 14 : 16)]
+        xsub <- x[["Cold-water Period"]][[i]]@fit[['daily']][ , c(1, 3, 6, 9, 11 : 13)]
         
         xsub$STAID <- STAID[i]
         
@@ -72,11 +72,10 @@ for (i in 1 : length(STAID))
     }
     
     # Spawning
-    
     if(class(x[["Spawning Period"]][[i]]) == 'metab_mle')
     {
         
-        xsub <- x[["Spawning Period"]][[i]]@fit[ , c(1 : 2, 5, 8, 14 : 16)]
+        xsub <- x[["Spawning Period"]][[i]]@fit[['daily']][ , c(1, 3, 6, 9, 11 : 13)]
         
         xsub$STAID <- STAID[i]
         
@@ -137,7 +136,7 @@ box.CW.ER <- ggplot() +
 CW.per <- grid.arrange(box.CW.GPP, box.CW.ER, nrow = 2, widths = 6.5, heights = c(3.25, 3.25))
 
 ggsave(filename = "fig22_boxplt_coldwater_DO_Metab_wDEPTH.png", plot = CW.per,
-       path = paste0(dir, svDir), width = 6.5, height = 6.5, units = "in", dpi = 300)
+       path = paste0(dir, svDir), width = 12, height = 9, units = "in", dpi = 300)
 
 # Spawning plots
 
@@ -163,7 +162,7 @@ box.SP.ER <- ggplot() +
 SP.per <- grid.arrange(box.SP.GPP, box.SP.ER, nrow = 2, widths = 6.5, heights = c(3.25, 3.25))
 
 ggsave(filename = "fig23_boxplt_spawning_DO_Metab_wDEPTH.png", plot = SP.per,
-       path = paste0(dir, svDir), width = 6.5, height = 6.5, units = "in", dpi = 300)
+       path = paste0(dir, svDir), width = 12, height = 9, units = "in", dpi = 300)
 
 # Reaeration rate plots 
 
@@ -192,4 +191,4 @@ box.SP.k600 <- ggplot() + theme_bw() +
 K600.per <- grid.arrange(box.CW.k600, box.SP.k600, nrow = 2, widths = 6.5, heights = c(3.25, 3.25))
 
 ggsave(filename = "fig24_boxplt_DO_metab_K600.png", plot = K600.per,
-       path = paste0(dir, svDir), width = 6.5, height = 6.5, units = "in", dpi = 300)
+       path = paste0(dir, svDir), width = 12, height = 9, units = "in", dpi = 300)

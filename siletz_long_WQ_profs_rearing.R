@@ -24,7 +24,7 @@ dir.sub1 <- "001_data\\wq_data\\Monitoring 2017\\LSWCD\\Lincoln_SWCD_SILETZ RIVE
 
 dir.sub2 <- "004_gis\\001_data\\001_shape\\sampling_locations"
 
-dir.sub3 <- "005_reporting\\figures\\analysis_memo"
+dir.sub3 <- "005_reporting\\presentations\\003_TWG_20190403\\figures_maps"
 
 data.tmp <- read.csv(paste0(dir, dir.sub1, "\\siletz_volmon_cont_data.csv"))
 
@@ -126,7 +126,7 @@ j <- 9
         x <- grid.arrange(box.Siletz[[i]], box.Rock[[i]], widths = c(8, 2))
     
         ggsave(paste0("fig0", j, "_do_conc_bxplt_", seas[i], ".png"), plot = x,
-               path = paste0(dir, dir.sub3), scale = 1, width = 10, height = 6,
+               path = paste0(dir, dir.sub3), scale = 1, width = 12, height = 9,
                units = "in", dpi = 300)
         
         j = j + 1
@@ -174,7 +174,7 @@ j <- 9
         x <- grid.arrange(box.Siletz[[i]], box.Rock[[i]], widths = c(8, 2))
         
         ggsave(paste0("fig", j, "_do_sat_bxplt_", seas[i], ".png"), plot = x,
-               path = paste0(dir, dir.sub3), scale = 1, width = 10, height = 6,
+               path = paste0(dir, dir.sub3), scale = 1, width = 12, height = 9,
                units = "in", dpi = 300)
         
         j = j + 1
@@ -221,7 +221,7 @@ j <- 9
         x <- grid.arrange(box.Siletz[[i]], box.Rock[[i]], widths = c(8, 2))
         
         ggsave(paste0("fig", j, "_temp_bxplt_", seas[i], ".png"), plot = x,
-               path = paste0(dir, dir.sub3), scale = 1, width = 10, height = 6,
+               path = paste0(dir, dir.sub3), scale = 1, width = 12, height = 9,
                units = "in", dpi = 300)
         
         j = j + 1

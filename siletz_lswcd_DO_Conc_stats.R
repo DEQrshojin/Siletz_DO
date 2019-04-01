@@ -235,7 +235,7 @@ for (i in 1 : length(sitesOld))
 
 # PLOT DATA ----
 
-saveDir <- paste0(dataDir, "005_reporting\\figures\\analysis_memo")
+saveDir <- paste0(dataDir, "005_reporting\\presentations\\003_TWG_20190403\\figures_maps")
 
 val <- read.csv(paste0(saveDir, "\\pltVals.csv"), stringsAsFactors = FALSE)
 
@@ -262,9 +262,9 @@ for (i in 1 : length(statNames))
                  label = val[i, 8], hjust = 0, vjust = val[i, 10], size = 3) +
         theme(plot.title = element_text(size = 10, hjust = 0.5),
               axis.title.x = element_blank()) + 
-        facet_wrap(~Station, ncol = 3)
+        facet_wrap(~Station, ncol = 4)
 
     ggsave(filename = val[i, 9], plot = doPlots[[i]], path = saveDir,
-           width = 7.5, height = 9, units = "in", dpi = 300)
+           width = 12, height = 9, units = "in", dpi = 300)
     
 }
