@@ -82,9 +82,7 @@ j <- 10
 # PLOT DO CONCENTRATION (mg/L)
 
 for (i in 1 : length(seas)) {
-  
-  i = 1
-  
+
   box.Siletz[[i]] <- ggplot() +
                      geom_boxplot(data = subset(data.bxplt,
                                                 (SEASON == seas[i] & River == "Siletz River")),
